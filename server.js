@@ -1,13 +1,16 @@
 
-/**
- * Module dependencies.
- */
+
 
 var express = require('express')
   , http = require('http')
   , path = require('path');
 
 var app = express();
+
+var MongoClient = require('mongodb').MongoClient;
+var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
+
+var db;
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -25,6 +28,10 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-});
+MongoClient.connect(mongoUrl, function (err, database) {
+  if (err) return console.log(err)
+  db = database
+  app.listen(3000, function() {
+    console.log('Server wizardry happens on port 3000')
+  })
+})
