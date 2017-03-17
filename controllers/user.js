@@ -2,30 +2,70 @@ var Q = require('q');
 var request = require('request');
 // May want to just conflate the two below functions
 
-exports.createNewExplorer = function(db, userCreds) {
-  db.collection("explorer").insertOne(userCreds, function(err, r) {
-    if (err) {
-      console.log("ERROR IN CREATE EXPLORER");
-      console.log(err);
-    } else {
-      console.log("SUCCESS");
+exports.findUser = function(db, userId) {
+  var deferred = Q.defer();
+
+  db.collection("users").findOne({"spotifyUserId": userId}, function(err, doc) {
+    if(err) {
+      deferred.reject(err);
     }
-    db.close()
+    else {
+      deferred.resolve(doc);
+    }
   });
+
+  return deferred.promise;
+});
+
+exports.createNewExplorer = function(db, userCreds) {
+  var deferred = Q.defer();
+
+  // TODO data validation
+
+  var doc = {
+    "type": "explorer",
+    "name": userInfo.name,
+    "spotifyUserId": userInfo.userId,
+    "musicTaste": [],
+  }
+
+  db.collection("users").insertOne(doc, function(err, r) {
+    if (err) {
+      deferred.reject(err);
+    } else {
+      deferred.resolve("SUCCESS");
+    }
+  });
+
+  return deferred.promise;
 }
 
 // Need to run classification on vendor spotify account here
-// Need OAuth for this :(
-exports.createNewVendor = function(db, userCreds) {
-  db.collection("explorer").insertOne(userCreds, function(err, r) {
+exports.createNewVendor = function(db, userInfo) {
+  var deferred = Q.defer();
+
+  // TODO data validation
+
+  var doc = {
+    "type": "vendor",
+    "name": userInfo.name,
+    "venueName": userInfo.venueName,
+    "spotifyUserId": userInfo.userId,
+    "lat": userInfo.lat,
+    "lng": userInfo.lng,
+    "musicTaste": [],
+    "currPlaylistId": userInfo.currPlaylistId,
+  }
+
+  db.collection("users").insertOne(doc, function(err, r) {
     if (err) {
-      console.log("ERROR IN CREATE EXPLORER");
-      console.log(err);
+      deferred.reject(err);
     } else {
-      console.log("SUCCESS");
+      deferred.resolve("SUCCESS");
     }
-    db.close()
   });
+
+  return deferred.promise;
 }
 
 exports.updateExplorer = function(db, newUserCreds) {

@@ -8,13 +8,12 @@ MongoClient.connect(mongoUrl, function (err, db) {
 });
 
 var testMain = function(db) {
-
 }
 
 var testInsert = function(db) {
   explorerObj = {
     'name': 'Rishin',
-    'spotifyId': '789sdf89',
+    'spotifyId': 'rdoshi023',
     'musicTaste': [
       'jazz',
       'pop'
@@ -25,5 +24,14 @@ var testInsert = function(db) {
 }
 
 var testFind = function(db) {
-
+  var userId = "rdoshi023";
+  db.collection("users").findOne({"spotifyUserId":  userId}, function(err, doc) {
+    if(err) {
+      console.log("BROKEN!");
+    }
+    else {
+      console.log(doc);
+    }
+  });
 }
+
