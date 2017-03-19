@@ -2,7 +2,7 @@ var request = require('request');
 var userClient = require('./user');
 var mapClient = require('./map');
 
-module.exports = function(db) {
+module.exports = function(app, db) {
   app.get('/index', function(req, res) {
     res.send('<h1>hello, world!</h1>');
   });
@@ -17,9 +17,8 @@ module.exports = function(db) {
         }
         
         // send user type {vendor / explorer}
-      });
-    })
-    .catch(function(err) {
+      })
+      .catch(function(err) {
     });
   });
 

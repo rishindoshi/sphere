@@ -1,5 +1,5 @@
 var express = require('express')
-  , http = require('http')
+  , https = require('https')
   , path = require('path');
 
 var fs = require('fs');
@@ -12,13 +12,16 @@ var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 var db;
 
 var sslOptions = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
+  key: fs.readFileSync('/etc/ssl/key.pem'),
+  cert: fs.readFileSync('/etc/ssl/cert.pem'),
   passphrase: 'sphere'
 };
 
+var port = process.env.PORT || 3000;
+
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  // app.set('port', process.env.PORT || 3000);
+  app.set('port', port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -36,8 +39,8 @@ app.configure('development', function(){
 MongoClient.connect(mongoUrl, function (err, database) {
   if (err) return console.log(err)
   db = database
-  require('./controllers/routes')(db);
-  app.listen(3000, function() {
-    console.log('Server wizardry happens on port 3000')
-  })
+  require('./controllers/routes')(app, db);
+  https.createServer(sslOptions, app).listen(3000, function() {
+    console.log('Super secure server wizardy happens on port ' + port)
+  });
 })
