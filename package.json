@@ -10,6 +10,7 @@
     "mongodb": "^2.2.24",
     "q": "^1.4.1",
     "request": "^2.81.0",
+    "request-promise": "^4.2.0",
     "spotify-web-api-node": "^2.3.6"
   },
   "engines": {

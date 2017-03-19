@@ -1,5 +1,5 @@
 var Q = require('q');
-var request = require('request');
+var request = require('request-promise');
 var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi({
@@ -8,56 +8,58 @@ var spotifyApi = new SpotifyWebApi({
   redirectUri : 'http://localhost:8888/callback'
 });
 
-exports.getAuthToken = function(){
+var getPlaylistGenres = function(uid, pid) {
   var deferred = Q.defer();
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: {
-      'Authorization': 'Basic ' + (new Buffer(spotifyApi.clientId +
-         ':' + spotifyApi.clientSecret).toString('base64'))
-    },
-    form: {
-      grant_type: 'client_credentials'
-    },
-    json: true
-  };
 
-  request.post(authOptions, function(err, res, body) {
-    if (err) {
+  spotifyApi.getPlaylist(uid, pid)
+    .then(function(plist) {
+      var items = plist.body.tracks.items;
+      return items.map(function(track) { return track.track.artists; })
+    })
+    .then(function(artistObjs) {
+      return artistObjs.map(function(artist) { return artist[0].id; })
+    })
+    .then(function(aids) {
+      aids = Array.from(new Set(aids));
+      return spotifyApi.getArtists(aids.slice(0,10));
+    })
+    .then(function(data) {
+      return data.body.artists.map(function(artist) { return artist.genres; });
+    })
+    .then(function(genres) {
+      var allGenres = [];
+      for (var i = 0; i < genres.length; ++i) {
+        allGenres = allGenres.concat(genres[i]);
+      }
+      allGenres = Array.from(new Set(allGenres));
+      deferred.resolve(allGenres);
+    })
+    .catch(function(err) {
       deferred.reject(err);
-    } else {
-      deferred.resolve(body.access_token);
-    }
-  });
+    });
 
   return deferred.promise;
 }
 
-
-
-
-
-
-exports.
-
-
-
-exports.getUserTaste = function(uId) {
-  request.post(authOptions)
-    .then(function(error, response, body) {
-      if (error) console.log(error);
-
-      var token = body.access_token;
-      var options = {
-        url: 'GET https://api.spotify.com/v1/users/' + uId + '/playlists',
-        headers: {
-          'Authorization': 'Bearer ' + token
-        },
-        json: true
-      };
-      return request.get(options);
-    });
-
-
-
-}
+spotifyApi.clientCredentialsGrant()
+  .then(function(data) {
+    console.log('The access token expires in ' + data.body['expires_in']);
+    console.log('The access token is ' + data.body['access_token']);
+    spotifyApi.setAccessToken(data.body['access_token']);
+    return spotifyApi.getUserPlaylists('rdoshi023');
+  })
+  .then(function(data) {
+    console.log('Successfully Retrieved Playlists');
+    return data.body.items.map(function(plist) { return plist.id });
+  })
+  .then(function(pids) {
+    // now extract artists from these playlists (choose 3-4 at random)
+    // console.log(pids);
+    getPlaylistGenres('rdoshi023', pids[0]);
+  })
+  .then(function(plist) {
+    console.log(plist);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });

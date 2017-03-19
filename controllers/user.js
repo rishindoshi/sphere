@@ -2,10 +2,10 @@ var Q = require('q');
 var request = require('request');
 // May want to just conflate the two below functions
 
-exports.findUser = function(db, userId) {
+exports.findUser = function(db, spotifyUserId) {
   var deferred = Q.defer();
 
-  db.collection("users").findOne({"spotifyUserId": userId}, function(err, doc) {
+  db.collection("users").findOne({"spotifyUserId": spotifyUserId}, function(err, doc) {
     if(err) {
       deferred.reject(err);
     }
@@ -41,10 +41,12 @@ exports.createNewExplorer = function(db, userInfo) {
 }
 
 // Need to run classification on vendor spotify account here
+// Use spotifyUserId to scrape playlists and extract genres
+// Then put those genres in the vendors 'musicTaste' db field
 exports.createNewVendor = function(db, userInfo) {
   var deferred = Q.defer();
 
-  // TODO data sanitization
+  // TODO data validation / sanitization
 
   var doc = {
     "type": "vendor",
