@@ -2,42 +2,12 @@ var request = require('request');
 var userClient = require('./user');
 var mapClient = require('./map');
 
+// TODO: move to a config file?
+var maxRadius = 1000; // meters
+
 module.exports = function(app, db) {
   app.get('/index', function(req, res) {
-    res.send('<h1>hello, world!</h1>');
-  });
-
-  app.post('/userInfo', function(req, res) {
-    var userId = req.body.userId;
-
-    userClient.findUser(db, spotifyUserId)
-      .then(function(doc) {
-        if(doc.length == 0) {
-          // send 'user doesn't exist'
-          // wait for frontend to call a 'create' route
-        }
-        // send user type {vendor / explorer}
-      })
-      .catch(function(err) {
-    });
-  });
-
-  app.get('/map', function(req, res) {
-    var lat = req.query.lat;
-    var lng = req.query.lng;
-
-    var locationInfo = {
-      "lat": lat,
-      "lng": lng,
-    }
-
-    mapClient(db, locationInfo)
-      .then(function(data) {
-        // res.send MAP
-      })
-      .catch(function(err) {
-        res.send(500);
-      });
+    res.send('<script>alert("hello, world!")</script>');
   });
 
   app.post('/createVendor', function(req, res) {
@@ -72,5 +42,36 @@ module.exports = function(app, db) {
       .catch(function(err) {
         res.start(500);
       });
+  });
+
+  app.get('/map', function(req, res) {
+    if(!req.query.lat || !req.query.lng) {
+      res.status(400).send();
+      return;
+    }
+
+    var radius = req.query.raidus || maxRadius;
+    mapClient.getVenues(db, req.query.lat, req.query.lng, radius)
+      .then(function(data) {
+        res.json(data);
+      })
+      .catch(function(err) {
+        res.status(500).send("db error looking up venues");
+      });
+  });
+
+  app.post('/userInfo', function(req, res) {
+    var userId = req.body.userId;
+
+    userClient.findUser(db, spotifyUserId)
+      .then(function(doc) {
+        if(doc.length == 0) {
+          // send 'user doesn't exist'
+          // wait for frontend to call a 'create' route
+        }
+        // send user type {vendor / explorer}
+      })
+      .catch(function(err) {
+    });
   });
 };

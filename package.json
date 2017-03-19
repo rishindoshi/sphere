@@ -6,8 +6,10 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "assert": "^1.4.1",
     "express": "3.0.0rc2",
-    "greenlock": "^2.1.12",
+    "geolib": "^2.0.22",
+    "mathjs": "^3.10.0",
     "mongodb": "^2.2.24",
     "q": "^1.4.1",
     "request": "^2.81.0",
