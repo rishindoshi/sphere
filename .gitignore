@@ -1,3 +1,7 @@
 node_modules
 cert.pem
 key.pem
+pid
+start_server
+stdout.txt
+stderr.txt
