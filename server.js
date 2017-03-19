@@ -12,12 +12,15 @@ var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 var db;
 
 var sslOptions = {
-  key: fs.readFileSync('/etc/ssl/key.pem'),
-  cert: fs.readFileSync('/etc/ssl/cert.pem'),
-  passphrase: 'sphere'
+  key: fs.readFileSync('/etc/ssl/privkey.pem'),
+  cert: fs.readFileSync('/etc/ssl/fullchain.pem')
+  // key: fs.readFileSync('/etc/letsencrypt/live/sgodbold.com/privkey.pem'),
+  // cert: fs.readFileSync('/etc/letsencrypt/live/sgodbold.com/fullchain.pem'),
+  // passphrase: 'sphere'
 };
 
 var port = process.env.PORT || 3000;
+console.log("PORT " + port);
 
 app.configure(function(){
   // app.set('port', process.env.PORT || 3000);
@@ -40,7 +43,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
   if (err) return console.log(err)
   db = database
   require('./controllers/routes')(app, db);
-  https.createServer(sslOptions, app).listen(3000, function() {
+  https.createServer(sslOptions, app).listen(port, function() {
     console.log('Super secure server wizardy happens on port ' + port)
   });
 })
