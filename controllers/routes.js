@@ -12,7 +12,7 @@ module.exports = function(app, db) {
 
     userClient.findUser(db, spotifyUserId)
       .then(function(doc) {
-        if(doc.length == 0) {
+        if (doc.length == 0) {
           // send 'user doesn't exist'
           // wait for frontend to call a 'create' route
         }
@@ -50,8 +50,8 @@ module.exports = function(app, db) {
     // ?? currPlaylistId": userInfo.currPlaylistId,
 
     userClient.createNewVendor(db, userInfo)
-      .then(function(val) {
-        // ignore val
+      .then(function(status) {
+        // status for success/failure
         res.send();
       })
       .catch(function(err) {

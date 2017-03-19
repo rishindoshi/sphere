@@ -21,7 +21,7 @@ var getPlaylistGenres = function(uid, pid) {
     })
     .then(function(aids) {
       aids = Array.from(new Set(aids));
-      return spotifyApi.getArtists(aids.slice(0,10));
+      return spotifyApi.getArtists(aids.slice(0,3));
     })
     .then(function(data) {
       return data.body.artists.map(function(artist) { return artist.genres; });
@@ -35,6 +35,7 @@ var getPlaylistGenres = function(uid, pid) {
       deferred.resolve(allGenres);
     })
     .catch(function(err) {
+      console.log("caught error in playlist genre extraction");
       deferred.reject(err);
     });
 
@@ -52,15 +53,20 @@ exports.getUserGenres = function(uid) {
       return spotifyApi.getUserPlaylists(uid);
     })
     .then(function(data) {
-      return data.body.items.map(function(plist) { return plist.id });
+      return data.body.items.filter(function(plist) {
+        return plist.owner.id === uid;
+      }).map(function(plist) {
+        return plist.id
+      });
     })
     .then(function(pids) {
-      var promiseArray = [];
-      pids = pids.slice(0, 3);
-      for (var i = 0; i < pids.length; ++i) {
-        promiseArray.push(getPlaylistGenres(uid, pids[i]));
-      }
-      return Q.all(promiseArray);
+      // var promiseArray = [];
+      // pids = pids.slice(0, 3);
+      // for (var i = 0; i < pids.length; ++i) {
+      //   promiseArray.push(getPlaylistGenres(uid, pids[i]));
+      // }
+      // return Q.all(promiseArray);
+      return getPlaylistGenres(uid, pids[0]);
     })
     .then(function(values) {
       var genres = [];

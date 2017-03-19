@@ -1,16 +1,15 @@
 var Q = require('q');
 var request = require('request');
 var userMusic = require('./spotify')
-// May want to just conflate the two below functions
+var venueapi = require('./venue');
 
 exports.findUser = function(db, spotifyUserId) {
   var deferred = Q.defer();
 
   db.collection("users").findOne({"spotifyUserId": spotifyUserId}, function(err, doc) {
-    if(err) {
+    if (err) {
       deferred.reject(err);
-    }
-    else {
+    } else {
       deferred.resolve(doc);
     }
   });
@@ -21,15 +20,12 @@ exports.findUser = function(db, spotifyUserId) {
 exports.createNewExplorer = function(db, userInfo) {
   var deferred = Q.defer();
 
-  // TODO data validation / sanitization
-
   var doc = {
     "type": "explorer",
     "name": userInfo.name,
     "spotifyUserId": userInfo.spotifyUserId,
     "musicTaste": [],
   }
-
   db.collection("users").insertOne(doc, function(err, r) {
     if (err) {
       deferred.reject(err);
@@ -44,8 +40,6 @@ exports.createNewExplorer = function(db, userInfo) {
 exports.createNewVendor = function(db, userInfo) {
   var deferred = Q.defer();
 
-  // TODO data validation / sanitization
-
   var doc = {
     "type": "vendor",
     "name": userInfo.name,
@@ -56,7 +50,6 @@ exports.createNewVendor = function(db, userInfo) {
     "musicTaste": [],
     "currPlaylistId": userInfo.currPlaylistId,
   }
-
   userMusic.getUserGenres(doc.spotifyUserId)
     .then(function(genres) {
       doc.musicTaste = genres;
