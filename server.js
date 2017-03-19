@@ -1,9 +1,8 @@
-
-
-
 var express = require('express')
   , http = require('http')
   , path = require('path');
+
+var fs = require('fs');
 
 var app = express();
 
@@ -11,6 +10,12 @@ var MongoClient = require('mongodb').MongoClient;
 var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 
 var db;
+
+var sslOptions = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem'),
+  passphrase: 'sphere'
+};
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -31,6 +36,7 @@ app.configure('development', function(){
 MongoClient.connect(mongoUrl, function (err, database) {
   if (err) return console.log(err)
   db = database
+  require('./controllers/routes')(db);
   app.listen(3000, function() {
     console.log('Server wizardry happens on port 3000')
   })

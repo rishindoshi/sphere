@@ -3,6 +3,10 @@ var userClient = require('./user');
 var mapClient = require('./map');
 
 module.exports = function(db) {
+  app.get('/index', function(req, res) {
+    res.send('<h1>hello, world!</h1>');
+  });
+
   app.post('/userInfo', function(req, res) {
     var userId = req.body.userId;
 
@@ -13,11 +17,10 @@ module.exports = function(db) {
         }
         
         // send user type {vendor / explorer}
-      }
+      });
     })
     .catch(function(err) {
     });
-
   });
 
   app.get('/map', function(req, res) {
