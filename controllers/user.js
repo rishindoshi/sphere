@@ -57,7 +57,10 @@ exports.createNewVendor = function(db, userInfo) {
         if (err) {
           deferred.reject(err);
         } else {
-          deferred.resolve("success: createNewVendor");
+          deferred.resolve({
+            message: "success: createNewVendor",
+            newVendor: doc
+          });
         }
       });
     })

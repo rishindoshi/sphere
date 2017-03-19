@@ -21,6 +21,7 @@ exports.tryNewVenue = function(db, newVendor) {
           'genres': newVendor.musicTaste,
           'vendorIds': [ newVendor.spotifyUserId ]
         };
+        console.log(venue.genres);
         return self.createNewVenue(db, venue);
       } else {
         return self.addExplorerTag(db, loc, newVendor.musicTaste);
@@ -46,6 +47,7 @@ exports.createNewVenue = function(db, venueInfo) {
     'genres': venueInfo.genres,
     'vendorIds': venueInfo.vendorIds
   };
+  console.log(doc.genres);
   db.collection('venues').insertOne(doc, function(err, r) {
     if (err) deferred.reject(err);
     else deferred.resolve("success: createVenue")
