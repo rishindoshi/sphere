@@ -2,9 +2,13 @@ var request = require('request');
 var userClient = require('./user');
 var mapClient = require('./map');
 
-module.exports = function(db) {
-  app.post('/userInquiry', function(req, res) {
-    var spotifyUserId = req.body.spotifyUserId;
+module.exports = function(app, db) {
+  app.get('/index', function(req, res) {
+    res.send('<h1>hello, world!</h1>');
+  });
+
+  app.post('/userInfo', function(req, res) {
+    var userId = req.body.userId;
 
     userClient.findUser(db, spotifyUserId)
       .then(function(doc) {
@@ -13,11 +17,9 @@ module.exports = function(db) {
           // wait for frontend to call a 'create' route
         }
         // send user type {vendor / explorer}
-      }
-    })
-    .catch(function(err) {
+      })
+      .catch(function(err) {
     });
-
   });
 
   app.get('/map', function(req, res) {

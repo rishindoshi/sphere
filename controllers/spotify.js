@@ -41,25 +41,46 @@ var getPlaylistGenres = function(uid, pid) {
   return deferred.promise;
 }
 
-spotifyApi.clientCredentialsGrant()
-  .then(function(data) {
-    console.log('The access token expires in ' + data.body['expires_in']);
-    console.log('The access token is ' + data.body['access_token']);
-    spotifyApi.setAccessToken(data.body['access_token']);
-    return spotifyApi.getUserPlaylists('rdoshi023');
-  })
-  .then(function(data) {
-    console.log('Successfully Retrieved Playlists');
-    return data.body.items.map(function(plist) { return plist.id });
-  })
-  .then(function(pids) {
-    // now extract artists from these playlists (choose 3-4 at random)
-    // console.log(pids);
-    getPlaylistGenres('rdoshi023', pids[0]);
-  })
-  .then(function(plist) {
-    console.log(plist);
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+exports.getUserGenres = function(uid) {
+  var deferred = Q.defer();
+
+  spotifyApi.clientCredentialsGrant()
+    .then(function(data) {
+      // console.log('The access token expires in ' + data.body['expires_in']);
+      // console.log('The access token is ' + data.body['access_token']);
+      spotifyApi.setAccessToken(data.body['access_token']);
+      return spotifyApi.getUserPlaylists(uid);
+    })
+    .then(function(data) {
+      return data.body.items.map(function(plist) { return plist.id });
+    })
+    .then(function(pids) {
+      var promiseArray = [];
+      pids = pids.slice(0, 3);
+      for (var i = 0; i < pids.length; ++i) {
+        promiseArray.push(getPlaylistGenres(uid, pids[i]));
+      }
+      return Q.all(promiseArray);
+    })
+    .then(function(values) {
+      var genres = [];
+      for (var i = 0; i < values.length; ++i) {
+        genres = genres.concat(values[i]);
+      }
+      genres = Array.from(new Set(genres));
+      deferred.resolve(genres);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+
+  return deferred.promise;
+}
+
+// getUserGenres('rdoshi023')
+//   .then(function(genres) {
+//     console.log(genres);
+//   })
+//   .catch(function(err) {
+//     console.log(err);
+//   });

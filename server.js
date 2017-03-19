@@ -1,9 +1,8 @@
-
-
-
 var express = require('express')
-  , http = require('http')
+  , https = require('https')
   , path = require('path');
+
+var fs = require('fs');
 
 var app = express();
 
@@ -12,8 +11,20 @@ var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 
 var db;
 
+var sslOptions = {
+  key: fs.readFileSync('/etc/ssl/privkey.pem'),
+  cert: fs.readFileSync('/etc/ssl/fullchain.pem')
+  // key: fs.readFileSync('/etc/letsencrypt/live/sgodbold.com/privkey.pem'),
+  // cert: fs.readFileSync('/etc/letsencrypt/live/sgodbold.com/fullchain.pem'),
+  // passphrase: 'sphere'
+};
+
+var port = process.env.PORT || 3000;
+console.log("PORT " + port);
+
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  // app.set('port', process.env.PORT || 3000);
+  app.set('port', port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -31,7 +42,8 @@ app.configure('development', function(){
 MongoClient.connect(mongoUrl, function (err, database) {
   if (err) return console.log(err)
   db = database
-  app.listen(3000, function() {
-    console.log('Server wizardry happens on port 3000')
-  })
+  require('./controllers/routes')(app, db);
+  https.createServer(sslOptions, app).listen(port, function() {
+    console.log('Super secure server wizardy happens on port ' + port)
+  });
 })

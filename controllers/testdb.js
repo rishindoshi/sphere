@@ -42,9 +42,9 @@ var clearUsers = function(db) {
 var testInsertVendor = function(db) {
   vendorObj = {
     "type": "vendor",
-    "name": "Steve",
+    "name": "Rishin",
     "venueName": "Common Cup Coffee",
-    "spotifyUserId": "sgodbold",
+    "spotifyUserId": "rdoshi023",
     "lat": 29348,
     "lng": 23123,
     "musicTaste": [],
@@ -57,8 +57,8 @@ var testInsertVendor = function(db) {
 var testInsertExplorer = function(db) {
   explorerObj = {
     'type': 'explorer',
-    'name': 'Rishin',
-    'spotifyUserId': 'rdoshi023',
+    'name': 'Steve',
+    'spotifyUserId': 'sgodbold',
     'musicTaste': []
   };
 
