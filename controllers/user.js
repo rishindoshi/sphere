@@ -15,17 +15,17 @@ exports.findUser = function(db, userId) {
   });
 
   return deferred.promise;
-});
+};
 
-exports.createNewExplorer = function(db, userCreds) {
+exports.createNewExplorer = function(db, userInfo) {
   var deferred = Q.defer();
 
-  // TODO data validation
+  // TODO data validation / sanitization
 
   var doc = {
     "type": "explorer",
     "name": userInfo.name,
-    "spotifyUserId": userInfo.userId,
+    "spotifyUserId": userInfo.spotifyUserId,
     "musicTaste": [],
   }
 
@@ -33,7 +33,7 @@ exports.createNewExplorer = function(db, userCreds) {
     if (err) {
       deferred.reject(err);
     } else {
-      deferred.resolve("SUCCESS");
+      deferred.resolve("success: createNewExplorer");
     }
   });
 
@@ -44,13 +44,13 @@ exports.createNewExplorer = function(db, userCreds) {
 exports.createNewVendor = function(db, userInfo) {
   var deferred = Q.defer();
 
-  // TODO data validation
+  // TODO data sanitization
 
   var doc = {
     "type": "vendor",
     "name": userInfo.name,
     "venueName": userInfo.venueName,
-    "spotifyUserId": userInfo.userId,
+    "spotifyUserId": userInfo.spotifyUserId,
     "lat": userInfo.lat,
     "lng": userInfo.lng,
     "musicTaste": [],
@@ -61,17 +61,9 @@ exports.createNewVendor = function(db, userInfo) {
     if (err) {
       deferred.reject(err);
     } else {
-      deferred.resolve("SUCCESS");
+      deferred.resolve("success: createNewVendor");
     }
   });
 
   return deferred.promise;
-}
-
-exports.updateExplorer = function(db, newUserCreds) {
-
-}
-
-exports.updateVendor = function(db, newUserCreds) {
-
 }

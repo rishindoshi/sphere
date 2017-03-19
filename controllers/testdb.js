@@ -4,34 +4,73 @@ var userapi = require('./user.js');
 
 MongoClient.connect(mongoUrl, function (err, db) {
   if (err) return console.log(err);
-  else testMain(db);
+  else testInsertOneFindOne(db);
+  // else clearUsers(db);
 });
 
-var testMain = function(db) {
+var testInsertOneFindOne = function(db) {
+  testInsertExplorer(db)
+    .then(function(status) {
+      console.log(status);
+      return testInsertVendor(db);
+    })
+    .then(function(status) {
+      console.log(status);
+      return testFindExplorer(db);
+    })
+    .then(function(results) {
+      console.log(results);
+      return testFindVendor(db);
+    })
+    .then(function(results) {
+      console.log(results);
+      db.close();
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
 }
 
-var testInsert = function(db) {
-  explorerObj = {
-    'name': 'Rishin',
-    'spotifyId': 'rdoshi023',
-    'musicTaste': [
-      'jazz',
-      'pop'
-    ]
-  };
-
-  userapi.createNewExplorer(db, explorerObj);
-}
-
-var testFind = function(db) {
-  var userId = "rdoshi023";
-  db.collection("users").findOne({"spotifyUserId":  userId}, function(err, doc) {
-    if(err) {
-      console.log("BROKEN!");
-    }
-    else {
-      console.log(doc);
-    }
+var clearUsers = function(db) {
+  db.collection("users").deleteMany({'type': 'explorer'}, function(err, r) {
+    db.collection("users").deleteMany({'type': 'vendor'}, function(err, r) {
+      db.close();
+    });
   });
 }
 
+var testInsertVendor = function(db) {
+  vendorObj = {
+    "type": "vendor",
+    "name": "Steve",
+    "venueName": "Common Cup Coffee",
+    "spotifyUserId": "sgodbold",
+    "lat": 29348,
+    "lng": 23123,
+    "musicTaste": [],
+    "currPlaylistId": "sdk98dfdj9",
+  };
+
+  return userapi.createNewVendor(db, vendorObj);
+}
+
+var testInsertExplorer = function(db) {
+  explorerObj = {
+    'type': 'explorer',
+    'name': 'Rishin',
+    'spotifyUserId': 'rdoshi023',
+    'musicTaste': []
+  };
+
+  return userapi.createNewExplorer(db, explorerObj)
+}
+
+var testFindVendor = function(db) {
+  var userId = "sgodbold";
+  return userapi.findUser(db, userId);
+}
+
+var testFindExplorer = function(db) {
+  var userId = "rdoshi023";
+  return userapi.findUser(db, userId);
+}
