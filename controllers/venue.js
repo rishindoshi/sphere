@@ -21,7 +21,6 @@ exports.tryNewVenue = function(db, newVendor) {
           'genres': newVendor.musicTaste,
           'vendorIds': [ newVendor.spotifyUserId ]
         };
-        console.log(venue.genres);
         return self.createNewVenue(db, venue);
       } else {
         return self.addExplorerTag(db, loc, newVendor.musicTaste);

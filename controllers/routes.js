@@ -14,7 +14,7 @@ module.exports = function(app, db) {
     userClient.findUser(db, spotifyUserId)
       .then(function(doc) {
         if (doc.length === 0) {
-          res.status(100).send("noexist");
+          res.status(100).send("usernoexist");
         } else {
           var userType = doc.type;
           res.status(200).send(userType);
