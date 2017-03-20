@@ -2,6 +2,8 @@ var request = require('request');
 var userClient = require('./user');
 var mapClient = require('./map');
 
+var maxRadius = 1000 // meters
+
 module.exports = function(app, db) {
   app.get('/index', function(req, res) {
     res.send('<h1>hello, world!</h1>');
@@ -22,21 +24,42 @@ module.exports = function(app, db) {
     });
   });
 
-  app.get('/map', function(req, res) {
-    var lat = req.query.lat;
-    var lng = req.query.lng;
-
-    var locationInfo = {
-      "lat": lat,
-      "lng": lng,
+  app.get('/venues', function(req, res) {
+    if(!req.query.lat || !req.query.lng) {
+      res.status(400).send();
+      return;
     }
 
-    mapClient(db, locationInfo)
+    var radius = req.query.radius || maxRadius;
+    mapClient.getVenues(db, req.query.lat, req.query.lng, radius)
       .then(function(data) {
-        // res.send MAP
+        res.json(data);
       })
       .catch(function(err) {
-        res.send(500);
+        res.status(500).send("db error getting up venues");
+		});
+  });
+
+  app.post('/venues', function(req, res) {
+    if(!req.body.name || !req.body.lat ||
+       !req.body.lng || !req.body.genres)
+    {
+      res.status(400).send();
+      return;
+    }
+
+    var venue = {
+      'name': req.body.name,
+      'lat': req.body.lat,
+      'lng': req.body.lng,
+    };
+
+    mapClient.updateVenues(db, venue, req.body.genres)
+      .then(function(data) {
+        res.status(200).send();
+      })
+      .catch(function(err) {
+        res.status(500).send("db error updating venue");
       });
   });
 

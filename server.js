@@ -14,16 +14,11 @@ var db;
 var sslOptions = {
   key: fs.readFileSync('/etc/ssl/privkey.pem'),
   cert: fs.readFileSync('/etc/ssl/fullchain.pem')
-  // key: fs.readFileSync('/etc/letsencrypt/live/sgodbold.com/privkey.pem'),
-  // cert: fs.readFileSync('/etc/letsencrypt/live/sgodbold.com/fullchain.pem'),
-  // passphrase: 'sphere'
 };
 
 var port = process.env.PORT || 3000;
-console.log("PORT " + port);
 
 app.configure(function(){
-  // app.set('port', process.env.PORT || 3000);
   app.set('port', port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
