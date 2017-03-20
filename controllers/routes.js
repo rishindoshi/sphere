@@ -11,7 +11,7 @@ module.exports = function(app, db) {
   app.post('/userVerify', function(req, res) {
     var userId = req.body.userId;
 
-    userClient.findUser(db, spotifyUserId)
+    userClient.findUser(db, userId)
       .then(function(doc) {
         if (doc.length === 0) {
           res.status(100).send("usernoexist");
