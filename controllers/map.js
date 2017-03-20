@@ -1,5 +1,6 @@
 var Q = require('q');
 var geoLib = require('geolib');
+var venueClient = require('./venue');
 
 var radiusCheck = function(lat, lng, venue, radius) {
   var dist = geoLib.getDistance(
@@ -35,6 +36,7 @@ exports.addVenue = function(db, venue) {
 
   db.collection("venues").insertOne(venue, function(err, r) {
     if(err) {
+      console.log(err);
       deferred.reject();
     }
     else {
@@ -45,3 +47,46 @@ exports.addVenue = function(db, venue) {
   return deferred.promise;
 };
 
+exports.updateVenue = function(db, venue, genres) {
+  var deferred = Q.defer();
+
+  var locationInfo = {
+    "lat": venue["lat"],
+    "lng": venue["lng"],
+  };
+
+  venueClient.findVenue(db, locationInfo)
+    .then(function(doc) {
+      if(doc === null) {
+        venue['genres'] = genres;
+
+        exports.addVenue(db, venue)
+          .then(function() {
+            deferred.resolve();
+          })
+          .catch(function(err) {
+            console.log(err);
+            deferred.reject(err);
+          });
+      }
+      else {
+        // deferred.resolve();
+        venueClient.addExplorerTag(db, locationInfo, genres)
+          .then(function() {
+            console.log("done");
+            deferred.resolve();
+          })
+          .catch(function() {
+            console.log(err);
+            deferred.reject(err);
+          });
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      deferred.reject();
+    });
+
+  // return venueClient.tryNewVenue(db, venue);
+  return deferred.promise;
+};

@@ -14,6 +14,7 @@ exports.tryNewVenue = function(db, newVendor) {
   self.findVenue(db, loc)
     .then(function(doc) {
       if (doc === null) {
+        console.log("not found");
         var venue = {
           'name': newVendor.venueName,
           'lat': newVendor.lat,
@@ -30,6 +31,7 @@ exports.tryNewVenue = function(db, newVendor) {
       deferred.resolve(status);
     })
     .catch(function(err) {
+      console.log(err);
       deferred.reject(err);
     });
 
@@ -46,10 +48,16 @@ exports.createNewVenue = function(db, venueInfo) {
     'genres': venueInfo.genres,
     'vendorIds': venueInfo.vendorIds
   };
-  console.log(doc.genres);
+
   db.collection('venues').insertOne(doc, function(err, r) {
-    if (err) deferred.reject(err);
-    else deferred.resolve("success: createVenue")
+    if (err) {
+      console.log("create failed");
+      deferred.reject(err);
+    }
+    else {
+      console.log(r);
+      deferred.resolve("success: createVenue")
+    }
   });
 
   return deferred.promise;
@@ -66,9 +74,16 @@ exports.findVenue = function(db, loc) {
 
 exports.addExplorerTag = function(db, loc, tag) {
   var deferred = Q.defer();
+  console.log(tag);
   db.collection('venues').updateOne(loc, {$addToSet: {'genres': tag}}, function(err, r) {
-    if (err) deferred.reject(err);
-    else deferred.resolve("success: addExplorerTag");
+    if (err) {
+      // console.log(err);
+      deferred.reject(err);
+    }
+    else {
+      console.log("done");
+      deferred.resolve("success: addExplorerTag");
+    }
   });
   return deferred.promise;
 }
