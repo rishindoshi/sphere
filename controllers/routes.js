@@ -14,7 +14,7 @@ module.exports = function(app, db) {
     userClient.findUser(db, userId)
       .then(function(doc) {
         if (doc == null) {
-          res.status(100).send("usernoexist");
+          res.status(200).send("usernoexist");
         } else {
           var userType = doc.type;
           res.status(200).send(userType);
