@@ -52,7 +52,7 @@ exports.createNewVendor = function(db, userInfo) {
     "lng": userInfo.lng,
     "musicTaste": [],
     "currPlaylistId": userInfo.currPlaylistId,
-  }
+  };
   userMusic.getUserGenres(doc.spotifyUserId)
     .then(function(genres) {
       doc.musicTaste = genres;
@@ -69,7 +69,7 @@ exports.createNewVendor = function(db, userInfo) {
     })
     .catch(function(err) {
       deferred.reject(err);
-    })
+    });
 
   return deferred.promise;
 }

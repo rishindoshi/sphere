@@ -1,7 +1,7 @@
 var Q = require('q');
 var userClient = require('./user');
 var spotifyClient = require('./spotify');
-var genClient = require('../dummy_data/gendata');
+var genClient = require('../data/gendata');
 var MongoClient = require('mongodb').MongoClient;
 var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 

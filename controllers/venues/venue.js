@@ -2,86 +2,74 @@ var Q = require('q');
 var request = require('request');
 var userMusic = require('../users/spotify');
 
-var isEmptyObject = function(obj) {
-  return !Object.keys(obj).length;
+exports.constructVenue = function(name, coords, genres) {
+  return {
+    name: name,
+    lat: coords.lat,
+    lng: coords.lng,
+    musicTaste: genres,
+    vendorIds: []
+  };
 }
 
-exports.tryNewVenue = function(db, newVendor) {
+exports.createOrUpdateVenueFromVendor = function(db, newVendor) {
   var deferred = Q.defer();
-  var loc = {'lat': newVendor.lat, 'lng': newVendor.lng};
   var self = this;
+  var coords = {lat: newVendor.lat, lng: newVendor.lng};
+  var genres = newVendor.musicTaste;
+  var name = newVendor.venueName;
 
-  self.findVenue(db, loc)
+  self.findVenue(db, coords)
     .then(function(doc) {
       if (doc === null) {
-        console.log("not found");
-        var venue = {
-          'name': newVendor.venueName,
-          'lat': newVendor.lat,
-          'lng': newVendor.lng,
-          'genres': newVendor.musicTaste,
-          'vendorIds': [ newVendor.spotifyUserId ]
-        };
-        return self.createNewVenue(db, venue);
+        var newVenue = self.constructVenue(name, coords, genres)
+        return self.insertVenue(db, newVenue);
       } else {
-        return self.addExplorerTag(db, loc, newVendor.musicTaste);
+        return self.updateVenueGenres(db, coords, genres);
       }
     })
     .then(function(status) {
       deferred.resolve(status);
     })
     .catch(function(err) {
-      console.log(err);
       deferred.reject(err);
     });
 
   return deferred.promise;
 }
 
-exports.createNewVenue = function(db, venueInfo) {
+exports.findVenue = function(db, coords) {
   var deferred = Q.defer();
-
-  var doc = {
-    'name': venueInfo.name,
-    'lat': venueInfo.lat,
-    'lng': venueInfo.lng,
-    'genres': venueInfo.genres,
-    'vendorIds': venueInfo.vendorIds
-  };
-
-  db.collection('venues').insertOne(doc, function(err, r) {
+  db.collection('venues').findOne(coords, function(err, doc) {
     if (err) {
-      console.log("create failed");
       deferred.reject(err);
+    } else {
+      deferred.resolve(doc);
     }
-    else {
-      deferred.resolve("success: createVenue")
-    }
-  });
-
-  return deferred.promise;
-}
-
-exports.findVenue = function(db, loc) {
-  var deferred = Q.defer();
-  db.collection('venues').findOne(loc, function(err, doc) {
-    if (err) deferred.reject(err);
-    else deferred.resolve(doc);
   });
   return deferred.promise;
 }
 
-exports.addExplorerTag = function(db, loc, tag) {
+exports.insertVenue = function(db, newVenue) {
   var deferred = Q.defer();
-  console.log(tag);
-  db.collection('venues').updateOne(loc, {$addToSet: {'genres': tag}}, function(err, r) {
+  db.collection('venues').insertOne(newVenue, function(err, r) {
     if (err) {
-      // console.log(err);
       deferred.reject(err);
+    } else {
+      deferred.resolve("success: insertVenue")
     }
-    else {
-      console.log("done");
-      deferred.resolve("success: addExplorerTag");
+  });
+  return deferred.promise;
+}
+
+// TODO: possible bug with adding arrays to arrays in genres field
+exports.updateVenueGenres = function(db, coords, genres) {
+  var deferred = Q.defer();
+  db.collection('venues').updateOne(coords, {$pushAll: {'musicTaste': genres}}, function(err, r) {
+    if (err) {
+      deferred.reject(err);
+    } else {
+      deferred.resolve("success: updateVenueGenres");
     }
   });
   return deferred.promise;
