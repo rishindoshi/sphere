@@ -1,6 +1,6 @@
 var Q = require('q');
 var request = require('request');
-var userMusic = require('./spotify');
+var userMusic = require('../users/spotify');
 
 var isEmptyObject = function(obj) {
   return !Object.keys(obj).length;
@@ -55,7 +55,6 @@ exports.createNewVenue = function(db, venueInfo) {
       deferred.reject(err);
     }
     else {
-      console.log(r);
       deferred.resolve("success: createVenue")
     }
   });

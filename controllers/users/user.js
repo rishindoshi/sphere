@@ -1,7 +1,7 @@
 var Q = require('q');
 var request = require('request');
 var userMusic = require('./spotify')
-var venueapi = require('./venue');
+var venueapi = require('../venues/venue');
 
 exports.findUser = function(db, spotifyUserId) {
   var deferred = Q.defer();
@@ -30,7 +30,10 @@ exports.createNewExplorer = function(db, userInfo) {
     if (err) {
       deferred.reject(err);
     } else {
-      deferred.resolve("success: createNewExplorer");
+      deferred.resolve({
+        message: "success: createNewExplorer",
+        newExplorer: doc
+      });
     }
   });
 
