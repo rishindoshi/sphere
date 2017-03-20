@@ -13,7 +13,7 @@ module.exports = function(app, db) {
 
     userClient.findUser(db, userId)
       .then(function(doc) {
-        if (doc.length === 0) {
+        if (doc == null) {
           res.status(100).send("usernoexist");
         } else {
           var userType = doc.type;
@@ -70,8 +70,8 @@ module.exports = function(app, db) {
 
   app.post('/createExplorer', function(req, res) {
     var newExplorer;
-    newExplorer.name = req.query.name;
-    newExplorer.spotifyUserId = req.query.spotifyUserId;
+    newExplorer.name = req.body.name;
+    newExplorer.spotifyUserId = req.body.spotifyUserId;
 
     userClient.createNewExplorer(db, newExplorer)
       .then(function(status) {
