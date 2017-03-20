@@ -1,6 +1,7 @@
 var request = require('request');
 var userClient = require('./user');
 var mapClient = require('./map');
+var venueClient = require('./venue');
 
 var maxRadius = 1000 // meters
 
@@ -9,19 +10,21 @@ module.exports = function(app, db) {
     res.send('<h1>hello, world!</h1>');
   });
 
-  app.post('/userInfo', function(req, res) {
+  app.post('/userVerify', function(req, res) {
     var userId = req.body.userId;
 
-    userClient.findUser(db, spotifyUserId)
+    userClient.findUser(db, userId)
       .then(function(doc) {
-        if (doc.length == 0) {
-          // send 'user doesn't exist'
-          // wait for frontend to call a 'create' route
+        if (doc == null) {
+          res.status(200).send("usernoexist");
+        } else {
+          var userType = doc.type;
+          res.status(200).send(userType);
         }
-        // send user type {vendor / explorer}
       })
       .catch(function(err) {
-    });
+        res.status(500).send(err);
+      });
   });
 
   app.get('/venues', function(req, res) {
@@ -64,36 +67,41 @@ module.exports = function(app, db) {
   });
 
   app.post('/createVendor', function(req, res) {
-    var userInfo;
-    userInfo.name = req.body.name;
-    userInfo.venueName =  req.body.venueName;
-    userInfo.spotifyUserId = req.body.spotifyUserId;
-    userInfo.lat = req.body.lat;
-    userInfo.lng = req.body.lng;
-    // ?? currPlaylistId": userInfo.currPlaylistId,
+    var newVendor;
+    newVendor.name = req.body.name;
+    newVendor.venueName =  req.body.venueName;
+    newVendor.spotifyUserId = req.body.spotifyUserId;
+    newVendor.lat = req.body.lat;
+    newVendor.lng = req.body.lng;
+    newVendor.musicTaste = [];
 
-    userClient.createNewVendor(db, userInfo)
+    userClient.createNewVendor(db, newVendor)
+      .then(function(resObj) {
+        console.log(resObj.message);
+        return venueClient.tryNewVenue(db, resObj.newVendor);
+      })
       .then(function(status) {
-        // status for success/failure
-        res.send();
+        console.log(status);
+        res.status(200).send(status);
       })
       .catch(function(err) {
-        res.send(500);
+        console.log(err);
+        res.status(500).send(err);
       });
+
   });
 
   app.post('/createExplorer', function(req, res) {
-    var userInfo;
-    userInfo.name = req.query.name;
-    userInfo.spotifyUserId = req.query.spotifyUserId;
+    var newExplorer;
+    newExplorer.name = req.body.name;
+    newExplorer.spotifyUserId = req.body.spotifyUserId;
 
-    userClient.createNewExplorer(db, userInfo)
-      .then(function(val) {
-        // ignore val
-        res.send();
+    userClient.createNewExplorer(db, newExplorer)
+      .then(function(status) {
+        res.status(200).send(status);
       })
       .catch(function(err) {
-        res.start(500);
+        res.status(500).send(err);
       });
   });
 };
