@@ -1,12 +1,12 @@
 var express = require('express')
   , https = require('https')
   , path = require('path');
-
 var fs = require('fs');
+// TODO: let config = require('config'); // loads config json
 
 var app = express();
-
 var MongoClient = require('mongodb').MongoClient;
+
 var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 
 var db;
@@ -42,3 +42,5 @@ MongoClient.connect(mongoUrl, function (err, database) {
     console.log('Super secure server wizardy happens on port ' + port)
   });
 })
+
+module.exports = app; // for testing
