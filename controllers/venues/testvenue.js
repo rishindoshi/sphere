@@ -8,7 +8,8 @@ var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 MongoClient.connect(mongoUrl, function (err, db) {
   if (err) return console.log(err);
   else {
-    testMain(db);
+    // testMain(db);
+    testAddOneGenreToVenue(db)
   }
 });
 
@@ -35,6 +36,21 @@ var testMain = function(db) {
       console.log(resObj.message);
       return venueClient.createOrUpdateVenueFromVendor(db, resObj.newVendor);
     })
+    .then(function(status) {
+      console.log(status);
+      db.close();
+    })
+    .catch(function(err) {
+      console.log(err);
+      db.close();
+    });
+}
+
+var testAddOneGenreToVenue = function(db) {
+  // This is subject to change
+  var coords = { lat: 42.298437, lng: -83.719747 };
+  var genre = "POOP";
+  venueClient.updateVenueGenres(db, coords, genre)
     .then(function(status) {
       console.log(status);
       db.close();

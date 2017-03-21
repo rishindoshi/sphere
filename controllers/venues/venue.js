@@ -62,8 +62,11 @@ exports.insertVenue = function(db, newVenue) {
   return deferred.promise;
 }
 
-// TODO: possible bug with adding arrays to arrays in genres field
 exports.updateVenueGenres = function(db, coords, genres) {
+  // So hacky but MVP so fuck it...
+  if (genres.constructor !== Array) {
+    genres = [ genres ];
+  }
   var deferred = Q.defer();
   db.collection('venues').updateOne(coords, {$pushAll: {'musicTaste': genres}}, function(err, r) {
     if (err) {
