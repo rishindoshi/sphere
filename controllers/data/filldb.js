@@ -18,6 +18,7 @@ var dbFill = function(db) {
   clearAllCollections(db)
     .then(function(status) {
       console.log(status);
+      // TODO: FILL
     })
     .catch(function(err) {
       console.log(err);
