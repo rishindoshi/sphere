@@ -47,13 +47,43 @@ var vendors = [
   {
     type: 'vendor',
     name: 'Allie',
-    venueName: 'Panera Bread',
+    venueName: 'south u pizza',
     spotifyUserId: '122624880',
-    lat: 42.298437,
-    lng: -83.719747,
+    lat: 42.27481,
+    lng: -83.73532,
     musicTaste: [],
     currPlaylistId: ""
-  }
+  },
+  {
+    type: 'vendor',
+    name: 'Nikil',
+    venueName: 'rays red hots',
+    spotifyUserId: 'nikilpremium',
+    lat: 42.27397,
+    lng: -83.73554,
+    musicTaste: [],
+    currPlaylistId: ""
+  },
+  {
+    type: 'vendor',
+    name: 'Shivum',
+    venueName: 'bubble island',
+    spotifyUserId: '12144439228',
+    lat: 42.27513,
+    lng: -83.73558,
+    musicTaste: [],
+    currPlaylistId: ""
+  },
+  {
+    type: 'vendor',
+    name: 'Arya',
+    venueName: 'burgerfi',
+    spotifyUserId: 'aryataylor',
+    lat: 42.27520,
+    lng: -83.73328,
+    musicTaste: [],
+    currPlaylistId: ""
+  },
 ];
 
 var genres = [

@@ -25,6 +25,7 @@ exports.createOrUpdateVenueFromVendor = function(db, newVendor) {
         var newVenue = self.constructVenue(name, coords, genres)
         return self.insertVenue(db, newVenue);
       } else {
+        console.log("VENUE ALREADY EXISTS");
         return self.updateVenueGenres(db, coords, genres);
       }
     })

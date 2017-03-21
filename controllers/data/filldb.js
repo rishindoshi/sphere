@@ -1,7 +1,7 @@
 var Q = require('q');
-var userapi = require('../users/user');
+var userClient = require('../users/user');
 var musicClient = require('../users/spotify');
-var venueapi = require('../venues/venue');
+var venueClient = require('../venues/venue');
 var mapClient = require('../venues/map');
 var MongoClient = require('mongodb').MongoClient;
 var genClient = require('./gendata');
@@ -18,11 +18,44 @@ var dbFill = function(db) {
   clearAllCollections(db)
     .then(function(status) {
       console.log(status);
-      // TODO: FILL
+      return fillVendors(db);
+    })
+    .then(function(stati) {
+      console.log(stati);
+      db.close();
     })
     .catch(function(err) {
       console.log(err);
+      db.close();
     });
+}
+
+var fillVendors = function(db) {
+  var deferred = Q.defer();
+  var vendors = genClient.getVendors();
+  var promiseArray = [];
+  for (var i = 0; i < vendors.length; ++i) {
+    var newVendor = vendors[i];
+    promiseArray.push(userClient.createNewVendor(db, newVendor));
+  }
+
+  Q.all(promiseArray)
+    .then(function(resObjs) {
+      var promiseArray2 = [];
+      console.log("success inserting vendors");
+      for (var j = 0; j < resObjs.length; ++j) {
+        var newVendor = resObjs[j].newVendor;
+        promiseArray2.push(venueClient.createOrUpdateVenueFromVendor(db, newVendor));
+      }
+      return Q.all(promiseArray2);
+    })
+    .then(function(stati) {
+      deferred.resolve(stati);
+    })
+    .catch(function(err) {
+      deferred.reject(err);
+    });
+  return deferred.promise;
 }
 
 var clearAllCollections = function(db) {

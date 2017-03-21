@@ -60,12 +60,6 @@ exports.getUserGenres = function(uid) {
       });
     })
     .then(function(pids) {
-      // var promiseArray = [];
-      // pids = pids.slice(0, 3);
-      // for (var i = 0; i < pids.length; ++i) {
-      //   promiseArray.push(getPlaylistGenres(uid, pids[i]));
-      // }
-      // return Q.all(promiseArray);
       return getPlaylistGenres(uid, pids[0]);
     })
     .then(function(values) {
