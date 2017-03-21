@@ -1,7 +1,7 @@
 var request = require('request');
-var userClient = require('./user');
-var mapClient = require('./map');
-var venueClient = require('./venue');
+var userClient = require('./users/user');
+var mapClient = require('./venues/map');
+var venueClient = require('./venues/venue');
 
 var maxRadius = 1000 // meters
 
