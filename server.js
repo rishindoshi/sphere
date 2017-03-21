@@ -25,6 +25,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.favicon());
   app.use(express.logger('dev'));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(express.methodOverride());
   app.use(app.router);

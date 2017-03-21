@@ -93,7 +93,8 @@ module.exports = function(app, db) {
   });
 
   app.post('/createExplorer', function(req, res) {
-    var newExplorer;
+    console.log(req.body);
+    var newExplorer = {};
     newExplorer.name = req.body.name;
     newExplorer.spotifyUserId = req.body.spotifyUserId;
 
