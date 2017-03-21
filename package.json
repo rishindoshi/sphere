@@ -2,9 +2,6 @@
   "name": "Sphere",
   "version": "0.0.1-1",
   "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
   "dependencies": {
     "assert": "^1.4.1",
     "body-parser": "^1.17.1",
@@ -17,9 +14,19 @@
     "request-promise": "^4.2.0",
     "spotify-web-api-node": "^2.3.6"
   },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.5.3"
+  },
   "engines": {
     "node": "0.8.x",
     "npm": "1.1.x"
+  },
+  "scripts": {
+    "start": "SET NODE_ENV=dev && node server.js",
+    "start-bg": "SET NODE_ENV=dev && node server.js > stdout.txt 2> stderr.txt &",
+    "test": "mocha --timeout 10000"
   },
   "subdomain": "express-skeleton"
 }
