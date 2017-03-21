@@ -1,6 +1,8 @@
 var express = require('express')
   , https = require('https')
   , path = require('path');
+
+var bodyParser = require('body-parser');
 var fs = require('fs');
 // TODO: let config = require('config'); // loads config json
 
@@ -24,7 +26,8 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(express.bodyParser());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));

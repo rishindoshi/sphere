@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "assert": "^1.4.1",
+    "body-parser": "^1.17.1",
     "express": "3.0.0rc2",
     "geolib": "^2.0.22",
     "mathjs": "^3.10.0",
