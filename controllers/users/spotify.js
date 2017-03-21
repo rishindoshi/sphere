@@ -82,11 +82,3 @@ exports.getUserGenres = function(uid) {
 
   return deferred.promise;
 }
-
-// getUserGenres('rdoshi023')
-//   .then(function(genres) {
-//     console.log(genres);
-//   })
-//   .catch(function(err) {
-//     console.log(err);
-//   });

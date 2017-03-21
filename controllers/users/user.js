@@ -1,7 +1,7 @@
 var Q = require('q');
 var request = require('request');
 var userMusic = require('./spotify')
-var venueapi = require('./venue');
+var venueapi = require('../venues/venue');
 
 exports.findUser = function(db, spotifyUserId) {
   var deferred = Q.defer();
@@ -30,7 +30,10 @@ exports.createNewExplorer = function(db, userInfo) {
     if (err) {
       deferred.reject(err);
     } else {
-      deferred.resolve("success: createNewExplorer");
+      deferred.resolve({
+        message: "success: createNewExplorer",
+        newExplorer: doc
+      });
     }
   });
 
@@ -49,7 +52,7 @@ exports.createNewVendor = function(db, userInfo) {
     "lng": userInfo.lng,
     "musicTaste": [],
     "currPlaylistId": userInfo.currPlaylistId,
-  }
+  };
   userMusic.getUserGenres(doc.spotifyUserId)
     .then(function(genres) {
       doc.musicTaste = genres;
@@ -66,7 +69,7 @@ exports.createNewVendor = function(db, userInfo) {
     })
     .catch(function(err) {
       deferred.reject(err);
-    })
+    });
 
   return deferred.promise;
 }

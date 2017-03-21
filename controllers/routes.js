@@ -74,11 +74,13 @@ module.exports = function(app, db) {
     newVendor.lat = req.body.lat;
     newVendor.lng = req.body.lng;
     newVendor.musicTaste = [];
+    var coords = {lat: newVendor.lat, lng: newVendor.lng};
 
     userClient.createNewVendor(db, newVendor)
       .then(function(resObj) {
         console.log(resObj.message);
-        return venueClient.tryNewVenue(db, resObj.newVendor);
+        newVendor.musicTaste = resObj.newVendor.musicTaste;
+        return venueClient.createOrUpdateVenueFromVendor(db, newVendor);
       })
       .then(function(status) {
         console.log(status);
@@ -88,7 +90,6 @@ module.exports = function(app, db) {
         console.log(err);
         res.status(500).send(err);
       });
-
   });
 
   app.post('/createExplorer', function(req, res) {
