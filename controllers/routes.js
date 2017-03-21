@@ -10,8 +10,8 @@ module.exports = function(app, db) {
     res.send('<h1>hello, world!</h1>');
   });
 
-  app.post('/userVerify', function(req, res) {
-    var userId = req.body.userId;
+  app.get('/userVerify', function(req, res) {
+    var userId = req.query.userId;
 
     userClient.findUser(db, userId)
       .then(function(doc) {
