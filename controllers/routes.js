@@ -67,7 +67,7 @@ module.exports = function(app, db) {
   });
 
   app.post('/createVendor', function(req, res) {
-    var newVendor;
+    var newVendor = {};
     newVendor.name = req.body.name;
     newVendor.venueName =  req.body.venueName;
     newVendor.spotifyUserId = req.body.spotifyUserId;
