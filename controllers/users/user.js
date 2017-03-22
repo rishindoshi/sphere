@@ -51,6 +51,7 @@ exports.createNewVendor = function(db, userInfo) {
     "lat": userInfo.lat,
     "lng": userInfo.lng,
     "musicTaste": [],
+    "address": userInfo.address,
     "currPlaylistId": userInfo.currPlaylistId,
   };
   userMusic.getUserGenres(doc.spotifyUserId)

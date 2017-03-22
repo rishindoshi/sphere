@@ -22,17 +22,19 @@ var vendors = [
     lat: 42.298546,
     lng: -83.721475,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "1739 Plymouth Rd, Ann Arbor, MI 48104"
   },
   {
     type: 'vendor',
     name: 'Chuckry',
     venueName: 'Panda Express',
     spotifyUserId: 'vengadamn',
-    lat: 42.290802,
-    lng: -83.717655,
+    lat: 42.275228,
+    lng: -83.741515,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "530 S State St, Ann Arbor, MI 48109"
   },
   {
     type: 'vendor',
@@ -42,7 +44,8 @@ var vendors = [
     lat: 42.298437,
     lng: -83.719747,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "1773 Plymouth Rd, Ann Arbor, MI 48105"
   },
   {
     type: 'vendor',
@@ -52,7 +55,8 @@ var vendors = [
     lat: 42.27481,
     lng: -83.73532,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "1106 S University Ave, Ann Arbor, MI 48104"
   },
   {
     type: 'vendor',
@@ -62,17 +66,19 @@ var vendors = [
     lat: 42.27397,
     lng: -83.73554,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "629 E University Ave, Ann Arbor, MI 48104"
   },
   {
     type: 'vendor',
     name: 'Shivum',
-    venueName: 'bubble island',
+    venueName: 'No Thai',
     spotifyUserId: '12144439228',
-    lat: 42.27513,
-    lng: -83.73558,
+    lat: 42.298400,
+    lng: -83.721305,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "1745 Plymouth Rd, Ann Arbor, MI 48105"
   },
   {
     type: 'vendor',
@@ -82,7 +88,8 @@ var vendors = [
     lat: 42.27520,
     lng: -83.73328,
     musicTaste: [],
-    currPlaylistId: ""
+    currPlaylistId: "",
+    address: "1235 S University Ave, Ann Arbor, MI 48104"
   },
 ];
 
