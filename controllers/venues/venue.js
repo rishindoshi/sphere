@@ -2,13 +2,14 @@ var Q = require('q');
 var request = require('request');
 var userMusic = require('../users/spotify');
 
-exports.constructVenue = function(name, coords, genres) {
+exports.constructVenue = function(name, coords, genres, address) {
   return {
     name: name,
     lat: coords.lat,
     lng: coords.lng,
     musicTaste: genres,
-    vendorIds: []
+    vendorIds: [],
+    address: address
   };
 }
 
@@ -18,11 +19,12 @@ exports.createOrUpdateVenueFromVendor = function(db, newVendor) {
   var coords = {lat: newVendor.lat, lng: newVendor.lng};
   var genres = newVendor.musicTaste;
   var name = newVendor.venueName;
+  var address = newVendor.address;
 
   self.findVenue(db, coords)
     .then(function(doc) {
       if (doc === null) {
-        var newVenue = self.constructVenue(name, coords, genres)
+        var newVenue = self.constructVenue(name, coords, genres, address)
         return self.insertVenue(db, newVenue);
       } else {
         console.log("VENUE ALREADY EXISTS");

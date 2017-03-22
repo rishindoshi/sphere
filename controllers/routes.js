@@ -74,7 +74,10 @@ module.exports = function(app, db) {
     newVendor.lat = req.body.lat;
     newVendor.lng = req.body.lng;
     newVendor.musicTaste = [];
+    newVendor.address = req.body.address;
     var coords = {lat: newVendor.lat, lng: newVendor.lng};
+
+    console.log(req.body.address);
 
     userClient.createNewVendor(db, newVendor)
       .then(function(resObj) {
