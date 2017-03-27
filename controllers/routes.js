@@ -81,9 +81,14 @@ module.exports = function(app, db) {
 
     userClient.createNewVendor(db, newVendor)
       .then(function(resObj) {
-        console.log(resObj.message);
-        newVendor.musicTaste = resObj.newVendor.musicTaste;
-        return venueClient.createOrUpdateVenueFromVendor(db, newVendor);
+        if (resObj.message === "duplicate") {
+          console.log(resObj.message);
+          res.status(200).send(resObj.message);
+        } else {
+          console.log(resObj.message);
+          newVendor.musicTaste = resObj.newVendor.musicTaste;
+          return venueClient.createOrUpdateVenueFromVendor(db, newVendor);
+        }
       })
       .then(function(status) {
         console.log(status);

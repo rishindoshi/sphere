@@ -16,9 +16,9 @@ var explorers = [
 var vendors = [
   {
     type: 'vendor',
-    name: 'Rishin',
+    name: 'Nick',
     venueName: 'Cardamom',
-    spotifyUserId: 'rdoshi023',
+    spotifyUserId: 'sagganaki',
     lat: 42.298546,
     lng: -83.721475,
     musicTaste: [],
@@ -27,20 +27,31 @@ var vendors = [
   },
   {
     type: 'vendor',
-    name: 'Chuckry',
-    venueName: 'Panda Express',
-    spotifyUserId: 'vengadamn',
-    lat: 42.275228,
-    lng: -83.741515,
+    name: 'Grace',
+    venueName: 'McDonalds',
+    spotifyUserId: '1221020391',
+    lat: 42.303085,
+    lng: -83.707915,
     musicTaste: [],
     currPlaylistId: "",
-    address: "530 S State St, Ann Arbor, MI 48109"
+    address: "Traver Village Shopping Center, 2675 Plymouth Rd, Ann Arbor, MI 48105"
   },
   {
     type: 'vendor',
-    name: 'Xinrui',
+    name: 'Nimesha',
+    venueName: 'Wendys',
+    spotifyUserId: '124723383',
+    lat: 42.298980,
+    lng: -83.722430,
+    musicTaste: [],
+    currPlaylistId: "",
+    address: "1655 Plymouth Rd, Ann Arbor, MI 48105"
+  },
+  {
+    type: 'vendor',
+    name: 'Imani',
     venueName: 'Panera Bread',
-    spotifyUserId: '1215155004',
+    spotifyUserId: 'imaniw95',
     lat: 42.298437,
     lng: -83.719747,
     musicTaste: [],
@@ -49,25 +60,25 @@ var vendors = [
   },
   {
     type: 'vendor',
-    name: 'Allie',
-    venueName: 'south u pizza',
-    spotifyUserId: '122624880',
-    lat: 42.27481,
-    lng: -83.73532,
+    name: 'Poop Pap',
+    venueName: 'Nagomi Sushi',
+    spotifyUserId: 'linol3um',
+    lat: 42.297925,
+    lng: -83.722995,
     musicTaste: [],
     currPlaylistId: "",
-    address: "1106 S University Ave, Ann Arbor, MI 48104"
+    address: "1754 Plymouth Rd, Ann Arbor, MI 48105"
   },
   {
     type: 'vendor',
     name: 'Nikil',
-    venueName: 'rays red hots',
+    venueName: 'Panda Express',
     spotifyUserId: 'nikilpremium',
     lat: 42.27397,
     lng: -83.73554,
     musicTaste: [],
     currPlaylistId: "",
-    address: "629 E University Ave, Ann Arbor, MI 48104"
+    address: "2101 Bonisteel Blvd, Ann Arbor, MI 48109"
   },
   {
     type: 'vendor',
@@ -83,13 +94,13 @@ var vendors = [
   {
     type: 'vendor',
     name: 'Arya',
-    venueName: 'burgerfi',
+    venueName: 'Curry On',
     spotifyUserId: 'aryataylor',
-    lat: 42.27520,
-    lng: -83.73328,
+    lat: 42.304055,
+    lng: -83.706445,
     musicTaste: [],
     currPlaylistId: "",
-    address: "1235 S University Ave, Ann Arbor, MI 48104"
+    address: "Chinatown Mall, 2711 Plymouth Rd, Ann Arbor, MI 48105"
   },
 ];
 

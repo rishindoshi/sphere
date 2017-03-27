@@ -54,7 +54,19 @@ exports.createNewVendor = function(db, userInfo) {
     "address": userInfo.address,
     "currPlaylistId": userInfo.currPlaylistId,
   };
-  userMusic.getUserGenres(doc.spotifyUserId)
+
+  exports.findUser(db, userInfo.spotifyUserId)
+    .then(function(resDoc) {
+      if (resDoc === null) {
+        return userMusic.getUserGenres(userInfo.spotifyUserId)
+      } else {
+        console.log("DUPLICATE VENDOR");
+        deferred.resolve({
+          message: "duplicate",
+          newVendor: resDoc
+        });
+      }
+    })
     .then(function(genres) {
       doc.musicTaste = genres;
       db.collection("users").insertOne(doc, function(err, r) {

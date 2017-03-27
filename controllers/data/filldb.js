@@ -44,8 +44,12 @@ var fillVendors = function(db) {
       var promiseArray2 = [];
       console.log("success inserting vendors");
       for (var j = 0; j < resObjs.length; ++j) {
-        var newVendor = resObjs[j].newVendor;
-        promiseArray2.push(venueClient.createOrUpdateVenueFromVendor(db, newVendor));
+        if (resObjs[j].message !== "duplicate") {
+          var newVendor = resObjs[j].newVendor;
+          promiseArray2.push(venueClient.createOrUpdateVenueFromVendor(db, newVendor));
+        } else {
+          console.log("vendor already exists!")
+        }
       }
       return Q.all(promiseArray2);
     })
