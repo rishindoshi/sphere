@@ -11,6 +11,6 @@ var venueSchema = new Schema({
 	address: String
 });
 
-var Venue = mongoose.model('Vendor', venueSchema);
+var Venue = mongoose.model('Venue', venueSchema);
 
 module.exports = Venue;

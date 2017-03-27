@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//TODO: is (lat,lng) necessary for this schema?
 var vendorSchema = new Schema({
 	name: String, 
 	spotifyUserId: { type: String, required: true, unique: true },

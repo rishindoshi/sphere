@@ -10,7 +10,7 @@ exports.constructExplorer = function(uid, name) {
 	});
 }	
 
-exports.findExplorer = function(db, spotifyUserId) {
+exports.findExplorer = function(spotifyUserId) {
   var deferred = Q.defer();
 
   return deferred.promise;
