@@ -3,12 +3,19 @@ var userClient = require('./users/user');
 var mapClient = require('./venues/map');
 var venueClient = require('./venues/venue');
 
+var explorer = require('./explorer');
+
 var maxRadius = 1000 // meters
 
 module.exports = function(app, db) {
   app.get('/index', function(req, res) {
     res.send('<h1>hello, world!</h1>');
   });
+
+  app.route('/explorer')
+    .get(explorer.getExplorer)
+    .post(explorer.postExplorer);
+    
 
   app.get('/userVerify', function(req, res) {
     var userId = req.query.userId;

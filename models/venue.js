@@ -3,12 +3,12 @@ var Schema = mongoose.Schema;
 
 var venueSchema = new Schema({
 	name: String, 
-	spotifyUserId: { type: String, required: true, unique: true },
-	musicTaste: Array,
+  vendorIds: [ Schema.Types.ObjectId ],
+	musicTaste: [ String ],
 	venueName: String, 
-	lat: Number,
-	lng: Number,
-	address: String
+	lat: { type: Number, required: true }, 
+	lng: { type: Number, required: true }, 
+	address: { type: String, required: true, unique: true }
 });
 
 var Venue = mongoose.model('Venue', venueSchema);
