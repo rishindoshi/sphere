@@ -1,7 +1,4 @@
-var mongoose = require('mongoose');
 var Vendor= require('../models/vendor');
-
-mongoose.Promise = require('q').Promise;
 
 var getVendor = function(req, res) {
   Vendor.findById(req.query.spotifyUserId)
