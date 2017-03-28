@@ -1,7 +1,7 @@
 var Q = require('q');
 var request = require('request');
 var userMusic = require('./spotify')
-var venueapi = require('../venues/venue');
+var venuapi = require('../venues/venue');
 
 exports.findUser = function(db, spotifyUserId) {
   var deferred = Q.defer();
