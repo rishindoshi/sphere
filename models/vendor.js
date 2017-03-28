@@ -11,7 +11,7 @@ var vendorSchema = new Schema({
 	venueName: String, 
 	lat: { type: Number, required: true }, 
 	lng: { type: Number, required: true }, 
-	address: { type: String }
+	address: { type: String, required: true }
 });
 
 var Vendor = mongoose.model('Vendor', vendorSchema);
