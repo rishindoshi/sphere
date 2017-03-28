@@ -21,6 +21,7 @@ app.use(bodyParser.json({ type: 'application/json' }));
 require('./controllers/routes')(app, db);
 
 mongoose.connect(config.DBHost);
+mongoose.Promise = require('q').Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error: '));
 
