@@ -23,7 +23,7 @@ module.exports = function(app) {
     .post(vendor.postVendor);
 
   app.route('/venue')
-    .get(venue.getVenue);
+    .get(venue.getVenue)
     .post(venue.postVenue);
 
   app.get('/userVerify', function(req, res) {
