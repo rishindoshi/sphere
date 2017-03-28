@@ -72,6 +72,7 @@ exports.getUserGenres = function(uid) {
     })
     .catch(function(err) {
       console.log(err);
+      deferred.reject(err);
     });
 
   return deferred.promise;
