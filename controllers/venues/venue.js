@@ -1,7 +1,9 @@
 var Q = require('q');
 var request = require('request');
 var userMusic = require('../spotify');
+var Venue = require('../models/venue');
 
+// TODO: may not need this
 exports.constructVenue = function(name, coords, genres, address) {
   return {
     name: name,
@@ -13,26 +15,13 @@ exports.constructVenue = function(name, coords, genres, address) {
   };
 }
 
-exports.createOrUpdateVenueFromVendor = function(db, newVendor) {
+var getVenue = function(query) {
   var deferred = Q.defer();
-  var self = this;
-  var coords = {lat: newVendor.lat, lng: newVendor.lng};
-  var genres = newVendor.musicTaste;
-  var name = newVendor.venueName;
-  var address = newVendor.address;
-
-  self.findVenue(db, coords)
-    .then(function(doc) {
-      if (doc === null) {
-        var newVenue = self.constructVenue(name, coords, genres, address)
-        return self.insertVenue(db, newVenue);
-      } else {
-        console.log("VENUE ALREADY EXISTS");
-        return self.updateVenueGenres(db, coords, genres);
-      }
-    })
-    .then(function(status) {
-      deferred.resolve(status);
+ 
+  // TODO: the query here may change to placeId 
+  Venue.find({ lat: query.lat, lng: req.lng })
+    .then(function(venue) {
+      deferred.resolve(venue);
     })
     .catch(function(err) {
       deferred.reject(err);
@@ -41,42 +30,45 @@ exports.createOrUpdateVenueFromVendor = function(db, newVendor) {
   return deferred.promise;
 }
 
-exports.findVenue = function(db, coords) {
+// TODO: a venue can be created in two ways:
+// A vendor can implicity create a venue when they register
+// Can an explorer check-in to a venue that doesn't exist in the db?
+// Yes, if we are assigning venues with no corresponding vendor default genres (i.e "pop")
+// TODO: What if a vendor registers for a venue that already exists?
+// Essentially, a venue is never explicity created.
+// It is always implicity created from either vendor registration or explorer check-in
+var postVenue = function(venue) {
   var deferred = Q.defer();
-  db.collection('venues').findOne(coords, function(err, doc) {
-    if (err) {
+  var newVenue = new Venue(venue);
+
+  newVenue.save()
+    .then(function(venue) {
+      deferred.resolve(venue);
+    })
+    .catch(function(err) {
       deferred.reject(err);
-    } else {
-      deferred.resolve(doc);
-    }
-  });
+    });
+
   return deferred.promise;
 }
 
-exports.insertVenue = function(db, newVenue) {
+var updateVenueGenres = function(venue, genres) {
   var deferred = Q.defer();
-  db.collection('venues').insertOne(newVenue, function(err, r) {
-    if (err) {
+  genres = (genres.constuctor !== Array) ? [ genres ] : genres;
+
+  Venue.find({ lat: query.lat, lng: req.lng })
+    .then(function(venue) {
+      venue.musicTaste = venue.musicTaste.concat(genres);
+      return venue.save();
+    })
+    .then(function(venue) {
+      deferred.resolve(venue);
+    })
+    .catch(function(err) {
       deferred.reject(err);
-    } else {
-      deferred.resolve("success: insertVenue")
-    }
-  });
+    });
+
   return deferred.promise;
 }
 
-exports.updateVenueGenres = function(db, coords, genres) {
-  // So hacky but MVP so fuck it...
-  if (genres.constructor !== Array) {
-    genres = [ genres ];
-  }
-  var deferred = Q.defer();
-  db.collection('venues').updateOne(coords, {$pushAll: {'musicTaste': genres}}, function(err, r) {
-    if (err) {
-      deferred.reject(err);
-    } else {
-      deferred.resolve("success: updateVenueGenres");
-    }
-  });
-  return deferred.promise;
-}
+module.exports = { updateVenueGenres, postVenue, getVenue };

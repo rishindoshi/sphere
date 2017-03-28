@@ -22,6 +22,10 @@ module.exports = function(app, db) {
     .get(vendor.getVendor)
     .post(vendor.postVendor);
 
+  app.route('/venue')
+    .get(venue.getVenue);
+    .post(venue.postVenue);
+
   app.get('/userVerify', function(req, res) {
     var p1 = explorerDB.find({ spotifyUserId: req.query.userId });
     var p2 = vendorDB.find({ spotifyUserId: req.query.userId });
