@@ -3,6 +3,10 @@ var request = require('request');
 var userMusic = require('../spotify');
 var Venue = require('../../models/venue');
 
+var isObjEmpty = function(obj) {
+  return Object.keys(obj).length === 0;
+}
+
 var constructVenueObj = function(name, id, addr, lat, lnt) {
   var newVenue = {
     name: name,
@@ -43,38 +47,6 @@ var postVenue = function(venue) {
   return deferred.promise;
 }
 
-var createOrUpdateVenueFromVendor = function(vendor) {
-  var deferred = Q.defer();
-  var self = this;
-  var coords = { lat: vendor.lat, lng: vendor.lng };
-
-  getVenue(coords)
-    .then(function(venue) {
-      if (venue === null) {
-        var newVenue = {
-          name: vendor.venueName,
-          vendorIds: [ vendor.spotifyUserId ],
-          musicTaste: [],
-          lat: vendor.lat,
-          lng: vendor.lng,
-          address: vendor.address
-        };
-        return self.postVenue(newVenue);
-      } else {
-        return self.updateVenueVendors(coords, vendor.spotifyUserId);
-      }
-    })
-    .then(function(venue) {
-      return self.updateVenueMusic(coords, vendor.musicTaste);
-    })
-    .then(function(venue) {
-      deferred.resolve(venue);
-    })
-    .catch(function(err) {
-      deferred.reject(err);
-    });
-}
-
 var updateVenueVendors = function(coords, vendorId) {
   var deferred = Q.defer();
   var self = this;
@@ -96,10 +68,11 @@ var updateVenueVendors = function(coords, vendorId) {
 
 var updateVenueMusic = function(venue, genres) {
   var deferred = Q.defer();
-  genres = (genres.constuctor !== Array) ? [ genres ] : genres;
+  genres = (genres.constructor !== Array) ? [ genres ] : genres;
 
   Venue.find({ lat: venue.lat, lng: venue.lng })
-    .then(function(venue) {
+    .then(function(venues) {
+      var venue = venues[0];
       venue.musicTaste = venue.musicTaste.concat(genres);
       return venue.save();
     })
@@ -113,4 +86,37 @@ var updateVenueMusic = function(venue, genres) {
   return deferred.promise;
 }
 
-module.exports = { updateVenueGenres, postVenue, getVenue };
+var createOrUpdateVenueFromVendor = function(vendor) {
+  var deferred = Q.defer();
+  var coords = { lat: vendor.lat, lng: vendor.lng };
+
+  getVenue(coords)
+    .then(function(venue) {
+      if (isObjEmpty(venue)) {
+        var newVenue = {
+          name: vendor.venueName,
+          vendorIds: [ vendor.spotifyUserId ],
+          musicTaste: [],
+          lat: vendor.lat,
+          lng: vendor.lng,
+          address: vendor.address
+        };
+        return postVenue(newVenue);
+      } else {
+        return updateVenueVendors(coords, vendor.spotifyUserId);
+      }
+    })
+    .then(function(venue) {
+      return updateVenueMusic(coords, vendor.musicTaste);
+    })
+    .then(function(venue) {
+      deferred.resolve(venue);
+    })
+    .catch(function(err) {
+      deferred.reject(err);
+    });
+
+  return deferred.promise;
+}
+
+module.exports = { createOrUpdateVenueFromVendor, postVenue, getVenue };

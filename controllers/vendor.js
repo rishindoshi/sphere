@@ -24,13 +24,15 @@ var postVendor = function(req, res) {
     .then(function(genres) {
       vendorInfo.musicTaste = genres;
       var newVendor = new Vendor(vendorInfo);
+      console.log("about to save vendor");
       return newVendor.save();
     })
     .then(function(vendor) {
-      var coords = { lat: vendorInfo.lat, lng: vendorInfo.lng };
-      return createOrUpdateVenueFromVendor(vendorInfo);
+      console.log("about to call venue shat");
+      return venueClient.createOrUpdateVenueFromVendor(vendorInfo);
     })
     .then(function(venue) {
+      console.log("returned from all that venue shat");
       res.send(venue);
     })
     .catch(function(err) {

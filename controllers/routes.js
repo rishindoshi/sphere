@@ -45,7 +45,7 @@ module.exports = function(app) {
     .post(vendor.postVendor);
 
   app.route('/venue')
-    .get(venue.getVendor);
+    .get(venue.getVenue);
 
   // TODO: get rid of this later
   app.post('/venue', function(req, res) {
