@@ -16,29 +16,6 @@ module.exports = function(app) {
     res.send('pong');
   });
 
-  app.route('/explorer')
-    .get(explorer.getExplorer)
-    .post(explorer.postExplorer);
-
-  app.route('/vendor')
-    .get(vendor.getVendor)
-    .post(vendor.postVendor);
-
-  app.route('/venue')
-    .get(venue.getVendor);
-
-  app.post('/venue', function(req, res) {
-    var newVenue = new venueDB(req.body);
-    newVenue.save()
-      .then(function(venue) {
-	res.send(venue);
-      })
-      .catch(function(err) {
-	res.send(err);
-      });
-  });
- 
-
   app.get('/userVerify', function(req, res) {
     var p1 = explorerDB.find({ spotifyUserId: req.query.userId });
     var p2 = vendorDB.find({ spotifyUserId: req.query.userId });
@@ -58,6 +35,30 @@ module.exports = function(app) {
       res.send(err);
     });
   });
+
+  app.route('/explorer')
+    .get(explorer.getExplorer)
+    .post(explorer.postExplorer);
+
+  app.route('/vendor')
+    .get(vendor.getVendor)
+    .post(vendor.postVendor);
+
+  app.route('/venue')
+    .get(venue.getVendor);
+
+  // TODO: get rid of this later
+  app.post('/venue', function(req, res) {
+    var newVenue = new venueDB(req.body);
+    newVenue.save()
+      .then(function(venue) {
+        res.send(venue);
+      })
+      .catch(function(err) {
+        res.send(err);
+      });
+  });
+
     
   /*
   app.get('/venues', function(req, res) {

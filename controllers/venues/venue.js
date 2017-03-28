@@ -32,11 +32,30 @@ var postVenue = function(venue) {
   return deferred.promise;
 }
 
+var updateVenueVendors = function(coords, vendorId) {
+  var deferred = Q.defer();
+  var self = this;
+
+  Venue.find({ lat: coords.lat, lng: coords.lng })
+    .then(function(venue) {
+      venue.vendorIds.push(vendorId);
+      return venue.save();
+    })
+    .then(function(venue) {
+      deferred.resolve(venue);
+    })
+    .catch(function(err) {
+      deferred.reject(err);
+    });
+  
+  return deferred.promise;
+}
+
 var updateVenueGenres = function(venue, genres) {
   var deferred = Q.defer();
   genres = (genres.constuctor !== Array) ? [ genres ] : genres;
 
-  Venue.find({ lat: query.lat, lng: req.lng })
+  Venue.find({ lat: venue.lat, lng: venue.lng })
     .then(function(venue) {
       venue.musicTaste = venue.musicTaste.concat(genres);
       return venue.save();
@@ -50,24 +69,5 @@ var updateVenueGenres = function(venue, genres) {
 
   return deferred.promise;
 }
-
-var updateVenueVendors = function(venue, vendorId) {
-  var deferred = Q.defer();
-
-  Venue.find({ lat: query.lat, lng: req.lng })
-    .then(function(venue) {
-      venue.vendorIds.push(vendorId);
-      return venue.save();
-    })
-    .then(function(venue) {
-      deferred.resolve(venue);
-    })
-    .catch(function(err) {
-      deferred.reject(err);
-    });
-}
-
-  return deferred.promise;
-
 
 module.exports = { updateVenueGenres, postVenue, getVenue };

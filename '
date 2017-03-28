@@ -15,25 +15,18 @@ var getVendor = function(req, res) {
 
 // TODO: When a new vendor is created, we need to either
 // create a new corresponding venue for that vendor, or
-// if the venue already exists, add the new vendor's musicTaste
-// to that already existing venue
+// if the venue already exists, add the new vendors genres
+// to the already existing venue
 var postVendor = function(req, res) {
-  var vendorInfo = req.body;
-
   spotify.getUserGenres(req.body.spotifyUserId)
     .then(function(genres) {
-      vendorInfo.musicTaste = genres;
-      var newVendor = new Vendor(vendorInfo);
+      var temp = req.body;
+      temp.musicTaste = genres;
+      var newVendor = new Vendor(info);
       return newVendor.save();
     })
     .then(function(vendor) {
-      var coords = { lat: vendorInfo.lat, lng: vendorInfo.lng };
-      var vendorId = vendorInfo.spotifyUserId;
-      return venueClient.updateVenueVendors(coords, vendorId);
-    })
-    .then(function(venue) {
-      // TODO: What object type is venue here? Test and find out
-      res.send(venue);
+      res.send(vendor);
     })
     .catch(function(err) {
       res.send(err);
