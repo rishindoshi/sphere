@@ -3,18 +3,6 @@ var request = require('request');
 var userMusic = require('../spotify');
 var Venue = require('../models/venue');
 
-// TODO: may not need this
-exports.constructVenue = function(name, coords, genres, address) {
-  return {
-    name: name,
-    lat: coords.lat,
-    lng: coords.lng,
-    musicTaste: genres,
-    vendorIds: [],
-    address: address
-  };
-}
-
 var getVenue = function(query) {
   var deferred = Q.defer();
  
@@ -70,5 +58,24 @@ var updateVenueGenres = function(venue, genres) {
 
   return deferred.promise;
 }
+
+var updateVenueVendors = function(venue, vendorId) {
+  var deferred = Q.defer();
+
+  Venue.find({ lat: query.lat, lng: req.lng })
+    .then(function(venue) {
+      venue.vendorIds.push(vendorId);
+      return venue.save();
+    })
+    .then(function(venue) {
+      deferred.resolve(venue);
+    })
+    .catch(function(err) {
+      deferred.reject(err);
+    });
+}
+
+  return deferred.promise;
+
 
 module.exports = { updateVenueGenres, postVenue, getVenue };
