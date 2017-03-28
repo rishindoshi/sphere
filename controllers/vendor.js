@@ -1,4 +1,5 @@
 var Vendor= require('../models/vendor');
+var spotify = require('./spotify');
 
 var getVendor = function(req, res) {
   Vendor.findById(req.query.spotifyUserId)
@@ -11,11 +12,15 @@ var getVendor = function(req, res) {
 }
 
 var postVendor = function(req, res) {
-  var newVendor= new Vendor(req.body);
-
-  newVendor.save(req.body)
-    .then(function(exp) {
-      res.send(exp);
+  spotify.getUserGenres(req.body.spotifyUserId)
+    .then(function(genres) {
+      var info = req.body;
+      info.musicTaste = genres;
+      var newVendor = new Vendor(info);
+      return newVendor.save(req.body);
+    })
+    .then(function(ven) {
+      res.send(ven);
     })
     .catch(function(err) {
       res.send(err);
