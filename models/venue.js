@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var venueSchema = new Schema({
-	name: String, 
   vendorIds: [ String ],
 	musicTaste: [ String ],
 	venueName: String, 
