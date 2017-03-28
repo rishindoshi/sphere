@@ -49,10 +49,10 @@ var postVenue = function(venue) {
 
 var updateVenueVendors = function(coords, vendorId) {
   var deferred = Q.defer();
-  var self = this;
 
   Venue.find({ lat: coords.lat, lng: coords.lng })
-    .then(function(venue) {
+    .then(function(venues) {
+      var venue = venues[0];
       venue.vendorIds.push(vendorId);
       return venue.save();
     })
