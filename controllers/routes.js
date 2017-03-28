@@ -4,12 +4,14 @@ var Q = require('q');
 var mapClient = require('./venues/map');
 var explorer = require('./explorer');
 var vendor = require('./vendor');
+var venue = require('./venues/venue');
 var explorerDB = require('../models/explorer');
 var vendorDB = require('../models/vendor');
+var venueDB = require('../models/venue');
 
 var maxRadius = 1000 // meters
 
-module.exports = function(app, db) {
+module.exports = function(app) {
   app.get('/ping', function(req, res) {
     res.send('pong');
   });
@@ -23,8 +25,19 @@ module.exports = function(app, db) {
     .post(vendor.postVendor);
 
   app.route('/venue')
-    .get(venue.getVenue);
-    .post(venue.postVenue);
+    .get(venue.getVendor);
+
+  app.post('/venue', function(req, res) {
+    var newVenue = new venueDB(req.body);
+    newVenue.save()
+      .then(function(venue) {
+	res.send(venue);
+      })
+      .catch(function(err) {
+	res.send(err);
+      });
+  });
+ 
 
   app.get('/userVerify', function(req, res) {
     var p1 = explorerDB.find({ spotifyUserId: req.query.userId });
@@ -46,6 +59,7 @@ module.exports = function(app, db) {
     });
   });
     
+  /*
   app.get('/venues', function(req, res) {
     if(!req.query.lat || !req.query.lng) {
       res.status(400).send();
@@ -84,4 +98,5 @@ module.exports = function(app, db) {
         res.status(500).send("db error updating venue");
       });
   });
+  */
 };
