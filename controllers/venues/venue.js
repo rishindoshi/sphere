@@ -1,6 +1,6 @@
 var Q = require('q');
 var request = require('request');
-var userMusic = require('../users/spotify');
+var userMusic = require('../spotify');
 
 exports.constructVenue = function(name, coords, genres, address) {
   return {

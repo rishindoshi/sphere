@@ -1,6 +1,6 @@
 var Q = require('q');
 var request = require('request');
-var userMusic = require('./spotify')
+var userMusic = require('../spotify')
 var venueapi = require('../venues/venue');
 
 exports.findUser = function(db, spotifyUserId) {

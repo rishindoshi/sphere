@@ -4,7 +4,7 @@ var Explorer = require('../models/explorer');
 mongoose.Promise = require('q').Promise;
 
 var getExplorer = function(req, res) {
-  Explorer.findById(req.query.spotifyUserId)
+  Explorer.find({ spotifyUserId: req.query.spotifyUserId })
     .then(function(exp) {
       res.json(exp);
     })

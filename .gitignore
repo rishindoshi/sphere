@@ -5,3 +5,4 @@ start_server
 stdout.txt
 stderr.txt
 *.swp
+*.log

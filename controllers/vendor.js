@@ -5,7 +5,7 @@ var spotify = require('./spotify');
 mongoose.Promise = require('q').Promise;
 
 var getVendor = function(req, res) {
-  Vendor.findById(req.query.spotifyUserId)
+  Vendor.find({ spotifyUserId: req.query.spotifyUserId })
     .then(function(vendor) {
       res.json(vendor);
     })
