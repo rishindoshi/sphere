@@ -13,7 +13,7 @@ var getExplorer = function(req, res) {
 var postExplorer = function(req, res) {
   var newExplorer = new Explorer(req.body);
 
-  newExplorer.save(req.body)
+  newExplorer.save()
     .then(function(exp) {
       res.send(exp);
     })

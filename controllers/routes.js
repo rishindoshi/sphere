@@ -9,7 +9,7 @@ var vendorDB = require('../models/vendor');
 
 var maxRadius = 1000 // meters
 
-module.exports = function(app, db) {
+module.exports = function(app) {
   app.get('/ping', function(req, res) {
     res.send('pong');
   });
@@ -42,6 +42,7 @@ module.exports = function(app, db) {
     });
   });
     
+  /*
   app.get('/venues', function(req, res) {
     if(!req.query.lat || !req.query.lng) {
       res.status(400).send();
@@ -80,4 +81,5 @@ module.exports = function(app, db) {
         res.status(500).send("db error updating venue");
       });
   });
+  */
 };
