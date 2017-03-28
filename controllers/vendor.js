@@ -18,10 +18,10 @@ var postVendor = function(req, res) {
       var info = req.body;
       info.musicTaste = genres;
       var newVendor = new Vendor(info);
-      return newVendor.save(req.body);
+      return newVendor.save();
     })
-    .then(function(ven) {
-      res.send(ven);
+    .then(function(vendor) {
+      res.send(vendor);
     })
     .catch(function(err) {
       res.send(err);
