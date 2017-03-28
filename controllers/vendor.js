@@ -28,11 +28,9 @@ var postVendor = function(req, res) {
     })
     .then(function(vendor) {
       var coords = { lat: vendorInfo.lat, lng: vendorInfo.lng };
-      var vendorId = vendorInfo.spotifyUserId;
-      return venueClient.updateVenueVendors(coords, vendorId);
+      return createOrUpdateVenueFromVendor(vendorInfo);
     })
     .then(function(venue) {
-      // TODO: What object type is venue here? Test and find out
       res.send(venue);
     })
     .catch(function(err) {
