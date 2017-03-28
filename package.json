@@ -5,7 +5,8 @@
   "dependencies": {
     "assert": "^1.4.1",
     "body-parser": "^1.17.1",
-    "express": "3.0.0rc2",
+    "config": "^1.25.1",
+    "express": "^4.15.2",
     "geolib": "^2.0.22",
     "mathjs": "^3.10.0",
     "mongodb": "^2.2.24",
@@ -25,9 +26,10 @@
     "npm": "1.1.x"
   },
   "scripts": {
-    "start": "SET NODE_ENV=dev && node server.js",
-    "start-bg": "SET NODE_ENV=dev && node server.js > stdout.txt 2> stderr.txt &",
-    "test": "mocha --timeout 10000"
+    "start": "export NODE_ENV=dev && node server.js",
+    "start-test": "export NODE_ENV=test && node server.js",
+    "start-bg": "export NODE_ENV=dev && node server.js > stdout.txt 2> stderr.txt &",
+    "run-tests": "mocha --timeout 10000"
   },
   "subdomain": "express-skeleton"
 }

@@ -1,0 +1,3 @@
+{
+	"DBHost": "mongodb://sgodbold2:password@ds137230.mlab.com:37230/sphere-testing"
+}

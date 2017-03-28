@@ -1,14 +1,12 @@
 var express = require('express')
   , https = require('https')
   , path = require('path')
-	, mongoose = require('mongoose');
+	, mongoose = require('mongoose')
+  , config = require('config');
 
 var bodyParser = require('body-parser');
 var fs = require('fs');
-// TODO: let config = require('config'); // loads config json
-
 var app = express();
-var mongoUrl = 'mongodb://rishdosh:Moniter123@ds131320.mlab.com:31320/sphere';
 
 var sslOptions = {
   key: fs.readFileSync('/etc/ssl/privkey.pem'),
@@ -17,23 +15,12 @@ var sslOptions = {
 
 var port = process.env.PORT || 3000;
 
-app.configure(function(){
-  app.set('port', port);
-  app.use(express.logger('dev'));
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json({ type: 'application/json' }));
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: 'application/json' }));
 
 require('./controllers/routes')(app, db);
 
-mongoose.connect(mongoUrl);
+mongoose.connect(config.DBHost);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error: '));
 
