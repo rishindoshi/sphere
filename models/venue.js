@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var venueSchema = new Schema({
 	name: String, 
-  vendorIds: [ Schema.Types.ObjectId ],
+  vendorIds: [ String ],
 	musicTaste: [ String ],
 	venueName: String, 
 	lat: { type: Number, required: true }, 
