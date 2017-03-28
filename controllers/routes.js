@@ -4,6 +4,7 @@ var mapClient = require('./venues/map');
 var venueClient = require('./venues/venue');
 
 var explorer = require('./explorer');
+var vendor = require('./vendor');
 
 var maxRadius = 1000 // meters
 
@@ -15,6 +16,10 @@ module.exports = function(app, db) {
   app.route('/explorer')
     .get(explorer.getExplorer)
     .post(explorer.postExplorer);
+
+  app.route('/vendor')
+    .get(vendor.getVendor)
+    .post(vendor.postVendor);
     
 
   app.get('/userVerify', function(req, res) {

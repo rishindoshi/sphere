@@ -26,8 +26,8 @@
     "npm": "1.1.x"
   },
   "scripts": {
-    "start": "export NODE_ENV=dev && node server.js",
     "start-test": "export NODE_ENV=test && node server.js",
+    "start": "export NODE_ENV=dev && node server.js",
     "start-bg": "export NODE_ENV=dev && node server.js > stdout.txt 2> stderr.txt &",
     "run-tests": "mocha --timeout 10000"
   },

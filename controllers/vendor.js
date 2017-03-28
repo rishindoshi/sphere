@@ -25,5 +25,5 @@ var postVendor = function(req, res) {
     });
 }
 
-module.exports = { getExplorer, postExplorer };
+module.exports = { getVendor, postVendor };
 
