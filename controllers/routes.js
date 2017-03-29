@@ -47,6 +47,9 @@ module.exports = function(app) {
   app.route('/venue')
     .get(venue.getVenue);
 
+  app.route('/venues')
+    .get(venue.getVenues);
+
   // TODO: get rid of this later
   app.post('/venue', function(req, res) {
     var newVenue = new venueDB(req.body);

@@ -1,11 +1,18 @@
 var Q = require('q');
-var request = require('request');
-var userMusic = require('../spotify');
+var geoLib = require('geolib');
 var Venue = require('../../models/venue');
 
 var isObjEmpty = function(obj) {
   return Object.keys(obj).length === 0;
 }
+
+var radiusCheck = function(lat, lng, venue, radius) {
+  var dist = geoLib.getDistance(
+      { latitude: lat, longitude: lng },
+      { latitude: venue['lat'], longitude: venue['lng'] }
+  );
+  return dist <= radius;
+};
 
 var constructVenueObj = function(name, id, addr, lat, lnt) {
   var newVenue = {
@@ -31,6 +38,25 @@ var getVenue = function(query) {
 
   return deferred.promise;
 }
+
+var getVenues = function(req, res) {
+  var venues = [];
+  var coords = { lat: req.query.lat, lng: req.query.lng };
+  
+  Venue.find({})
+    .then(function(results) {
+      for(var i = 0; i < results.length; ++i) {
+        var doc = results[i];
+        if (radiusCheck(coords, doc, req.query.radius)) {
+          venues.push(doc);
+        }
+      }
+      res.send(venues);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
+};
 
 var postVenue = function(venue) {
   var deferred = Q.defer();
