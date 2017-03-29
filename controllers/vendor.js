@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Vendor = require('../models/vendor');
-var venueClient = require('./venues/venue');
 var spotify = require('./spotify');
 
 var getVendor = function(req, res) {
@@ -13,10 +12,6 @@ var getVendor = function(req, res) {
     });
 }
 
-// TODO: When a new vendor is created, we need to either
-// create a new corresponding venue for that vendor, or
-// if the venue already exists, add the new vendor's musicTaste
-// to that already existing venue
 var postVendor = function(req, res) {
   var vendorInfo = req.body;
 

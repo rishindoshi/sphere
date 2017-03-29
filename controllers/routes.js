@@ -1,10 +1,10 @@
 var request = require('request');
 var Q = require('q');
 
-var mapClient = require('./venues/map');
 var explorer = require('./explorer');
 var vendor = require('./vendor');
-var venue = require('./venues/venue');
+var venue = require('./venue');
+
 var explorerDB = require('../models/explorer');
 var vendorDB = require('../models/vendor');
 var venueDB = require('../models/venue');
@@ -15,6 +15,20 @@ module.exports = function(app) {
   app.get('/ping', function(req, res) {
     res.send('pong');
   });
+
+  app.route('/explorer')
+    .get(explorer.getExplorer)
+    .post(explorer.postExplorer);
+
+  app.route('/vendor')
+    .get(vendor.getVendor)
+    .post(vendor.postVendor);
+
+  app.route('/venue')
+    .get(venue.getVenue);
+
+  app.route('/venues')
+    .get(venue.getVenues);
 
   app.get('/userVerify', function(req, res) {
     var p1 = explorerDB.find({ spotifyUserId: req.query.userId });
@@ -35,72 +49,4 @@ module.exports = function(app) {
       res.send(err);
     });
   });
-
-  app.route('/explorer')
-    .get(explorer.getExplorer)
-    .post(explorer.postExplorer);
-
-  app.route('/vendor')
-    .get(vendor.getVendor)
-    .post(vendor.postVendor);
-
-  app.route('/venue')
-    .get(venue.getVenue);
-
-  app.route('/venues')
-    .get(venue.getVenues);
-
-  // TODO: get rid of this later
-  app.post('/venue', function(req, res) {
-    var newVenue = new venueDB(req.body);
-    newVenue.save()
-      .then(function(venue) {
-        res.send(venue);
-      })
-      .catch(function(err) {
-        res.send(err);
-      });
-  });
-
-    
-  /*
-  app.get('/venues', function(req, res) {
-    if(!req.query.lat || !req.query.lng) {
-      res.status(400).send();
-      return;
-    }
-
-    var radius = req.query.radius || maxRadius;
-    mapClient.getVenues(db, req.query.lat, req.query.lng, radius)
-      .then(function(data) {
-        res.json(data);
-      })
-      .catch(function(err) {
-        res.status(500).send("db error getting up venues");
-		});
-  });
-
-  app.post('/venues', function(req, res) {
-    if(!req.body.name || !req.body.lat ||
-       !req.body.lng || !req.body.genres)
-    {
-      res.status(400).send();
-      return;
-    }
-
-    var venue = {
-      'name': req.body.name,
-      'lat': req.body.lat,
-      'lng': req.body.lng,
-    };
-
-    mapClient.updateVenues(db, venue, req.body.genres)
-      .then(function(data) {
-        res.status(200).send();
-      })
-      .catch(function(err) {
-        res.status(500).send("db error updating venue");
-      });
-  });
-  */
 };
