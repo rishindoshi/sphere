@@ -6,10 +6,10 @@ var isObjEmpty = function(obj) {
   return Object.keys(obj).length === 0;
 }
 
-var radiusCheck = function(lat, lng, venue, radius) {
+var radiusCheck = function(coords, venue, radius) {
   var dist = geoLib.getDistance(
-      { latitude: lat, longitude: lng },
-      { latitude: venue['lat'], longitude: venue['lng'] }
+      { latitude: coords.lat, longitude: coords.lng },
+      { latitude: venue.lat, longitude: venue.lng }
   );
   return dist <= radius;
 };
@@ -42,12 +42,13 @@ var getVenue = function(query) {
 var getVenues = function(req, res) {
   var venues = [];
   var coords = { lat: req.query.lat, lng: req.query.lng };
+  var radius = req.query.radius;
   
   Venue.find({})
     .then(function(results) {
       for(var i = 0; i < results.length; ++i) {
         var doc = results[i];
-        if (radiusCheck(coords, doc, req.query.radius)) {
+        if (radiusCheck(coords, doc, radius)) {
           venues.push(doc);
         }
       }
@@ -145,4 +146,4 @@ var createOrUpdateVenueFromVendor = function(vendor) {
   return deferred.promise;
 }
 
-module.exports = { createOrUpdateVenueFromVendor, postVenue, getVenue };
+module.exports = { createOrUpdateVenueFromVendor, postVenue, getVenue, getVenues };
