@@ -14,17 +14,6 @@ var radiusCheck = function(coords, venue, radius) {
   return dist <= radius;
 };
 
-var constructVenueObj = function(name, id, addr, lat, lnt) {
-  var newVenue = {
-    name: name,
-    vendorIds: [] ,
-    musicTaste: [],
-    lat: lat,
-    lng: lng,
-    address: address
-  };
-}
-
 var getVenue = function(query) {
   var deferred = Q.defer();
 
