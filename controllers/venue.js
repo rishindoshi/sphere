@@ -1,6 +1,6 @@
 var Q = require('q');
 var geoLib = require('geolib');
-var Venue = require('../../models/venue');
+var Venue = require('../models/venue');
 
 var isObjEmpty = function(obj) {
   return Object.keys(obj).length === 0;
