@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var Vendor = require('../models/vendor');
 var spotify = require('./spotify');
 
