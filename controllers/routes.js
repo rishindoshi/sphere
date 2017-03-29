@@ -7,9 +7,6 @@ var venue = require('./venue');
 
 var explorerDB = require('../models/explorer');
 var vendorDB = require('../models/vendor');
-var venueDB = require('../models/venue');
-
-var maxRadius = 1000 // meters
 
 module.exports = function(app) {
   app.get('/ping', function(req, res) {
@@ -24,6 +21,7 @@ module.exports = function(app) {
     .get(vendor.getVendor)
     .post(vendor.postVendor);
 
+  // TODO: For testing only; remove later
   app.route('/venue')
     .get(venue.getVenue);
 
@@ -45,8 +43,8 @@ module.exports = function(app) {
         res.send("usernoexist");
       }
     }, function(err) {
-      console.log(err);
       res.send(err);
     });
   });
+
 };
