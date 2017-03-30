@@ -10,6 +10,13 @@ let should = chai.should();
 
 let data = require('../controllers/data/gendata');
 
+var vendorCheck = function(res, vendor) {
+  res.name.should.be.equal(vendor.name);
+  res.spotifyUserId.should.be.equal(vendor.spotifyUserId);
+  res.musicTaste.should.be.deep.equal(vendor.musicTaste);
+  res.venueId.should.be.equal(vendor.venueId);
+};
+
 chai.use(chaiHttp);
 
 describe('Vendors', () => {
@@ -31,9 +38,8 @@ describe('Vendors', () => {
           .get('/vendor?spotifyUserId=' + steve.spotifyUserId)
           .end((err, res) => {
             res.should.have.status(200);
-            res.body.should.be.an('array');
-            res.body.length.should.be.eql(1);
-            vendorCheck(res.body[0], steve);
+            res.body.should.be.an('object');
+            vendorCheck(res.body, steve);
             done();
           });
       });
@@ -45,8 +51,6 @@ describe('Vendors', () => {
       .get('/vendor?spotifyUserId=3')
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.an('array');
-        res.body.length.should.be.eql(0);
         done();
       });
     });
@@ -62,7 +66,6 @@ describe('Vendors', () => {
       .send(steve)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.an('object');
         done();
       });
     });

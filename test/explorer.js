@@ -39,9 +39,8 @@ describe('Explorers', () => {
           .get('/explorer?spotifyUserId=' + steve.spotifyUserId)
           .end((err, res) => {
             res.should.have.status(200);
-            res.body.should.be.an('array');
-            res.body.length.should.be.eql(1);
-            explorerCheck(res.body[0], steve);
+            res.body.should.be.an('object');
+            explorerCheck(res.body, steve);
             done();
           });
       });
@@ -53,8 +52,6 @@ describe('Explorers', () => {
       .get('/explorer?spotifyUserId=3')
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.an('array');
-        res.body.length.should.be.eql(0);
         done();
       });
     });

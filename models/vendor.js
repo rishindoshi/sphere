@@ -8,10 +8,7 @@ var vendorSchema = new Schema({
 	name: String, 
 	spotifyUserId: { type: String, required: true, unique: true },
 	musicTaste: [ String ],
-	venueName: String, 
-	lat: { type: Number, required: true }, 
-	lng: { type: Number, required: true }, 
-	address: { type: String, required: true }
+  venueId: String // the Google Places ID
 });
 
 var Vendor = mongoose.model('Vendor', vendorSchema);

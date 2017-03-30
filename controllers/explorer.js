@@ -3,7 +3,7 @@ var Explorer = require('../models/explorer');
 var getExplorer = function(req, res) {
   Explorer.find({ spotifyUserId: req.query.spotifyUserId })
     .then(function(exp) {
-      res.json(exp);
+      res.json(exp[0]);
     })
     .catch(function(err) {
       res.send(err);
