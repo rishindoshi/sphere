@@ -25,7 +25,7 @@ describe('Explorers', () => {
 
   // test /GET
   describe('/GET a valid explorer ID', () => {
-  it('it should return one explorer obejct', (done) => {
+  it('should return one explorer obejct', (done) => {
     let steve = {
       name: "steve",
       spotifyUserId: "123",
@@ -48,7 +48,7 @@ describe('Explorers', () => {
     });
   });
   describe('/GET bad explorer ID', () => {
-  it('it should return null for bad IDs', (done) => {
+  it('should return null for bad IDs', (done) => {
     chai.request(server)
       .get('/explorer?spotifyUserId=3')
       .end((err, res) => {
@@ -62,7 +62,7 @@ describe('Explorers', () => {
 
   // test /POST
   describe('/POST a valid explorer', () => {
-    it('it should return the created explorer object', (done) => {
+    it('should return the created explorer object', (done) => {
       let rishin = {
         name: "rishin",
         spotifyUserId: "456",
@@ -81,7 +81,7 @@ describe('Explorers', () => {
     });
   });
   describe('/POST an explorer with extra fields', () => {
-    it('it should return the created explorer object and ignore extra fields', (done) => {
+    it('should return the created explorer object and ignore extra fields', (done) => {
       let rishin = {
         name: "rishin",
         spotifyUserId: "456",
@@ -101,7 +101,7 @@ describe('Explorers', () => {
     });
   });
   describe('/POST an explorer with empty optional fields', () => {
-    it('it should return the created explorer object with optional fields empty', (done) => {
+    it('should return the created explorer object with optional fields empty', (done) => {
       let alice = {
         name: "",
         spotifyUserId: "12345",
@@ -120,7 +120,7 @@ describe('Explorers', () => {
     });
   });
   describe('/POST an explorer with empty required fields', () => {
-    it('it should return an error message', (done) => {
+    it('should return an error message', (done) => {
       let alice = {
         name: "alice",
         spotifyUserId: "",
@@ -139,7 +139,7 @@ describe('Explorers', () => {
     });
   });
   describe('/POST an empty explorer', () => {
-    it('it should return an error message', (done) => {
+    it('should return an error message', (done) => {
       let alice = {};
 
       chai.request(server)

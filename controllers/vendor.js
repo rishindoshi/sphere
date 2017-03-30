@@ -24,7 +24,7 @@ var postVendor = function(req, res) {
       return venueClient.createOrUpdateVenueFromVendor(vendorInfo);
     })
     .then(function(venue) {
-      res.send(venue);
+      res.status(200).send();
     })
     .catch(function(err) {
       res.send(err);
