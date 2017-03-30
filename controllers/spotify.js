@@ -8,31 +8,78 @@ var spotifyApi = new SpotifyWebApi({
   redirectUri : 'http://localhost:8888/callback'
 });
 
-var getPlaylistGenres = function(uid, pid) {
-  var deferred = Q.defer();
+var shuffle = function(a) {
+  for (let i = a.length; i; i--) {
+    let j = Math.floor(Math.random() * i);
+    [a[i - 1], a[j]] = [a[j], a[i - 1]];
+  }
+}
 
-  spotifyApi.getPlaylist(uid, pid)
-    .then(function(plist) {
-      var items = plist.body.tracks.items;
+var mostFrequent = function(arr) {
+  var freq = {};
+  for (var i = 0; i < arr.length; ++i) {
+    var elt = arr[i];
+    freq[elt] = (elt in freq) ? freq[elt]+1 : 1;
+  }
+  var freqArr = [];
+  for (elt in freq) {
+    freqArr.push({ elt: elt, freq: freq[elt] });
+  }
+  freqArr.sort(function(a, b) {
+    return b.freq - a.freq;
+  });
+  return freqArr;
+} 
+
+var getPlaylistGenres = function(uid, pids) {
+  var deferred = Q.defer();
+  var promises = [];
+  
+  for (var i = 0; i < pids.length; ++i) {
+    promises.push(spotifyApi.getPlaylist(uid, pids[i]));
+  }
+ 
+  Q.all(promises)
+    .then(function(values) {
+      var items = [];
+      console.log("USER PLAYLISTS:");
+      for (var j = 0; j < values.length; ++j) {
+        console.log(values[j].body.name);
+        items = items.concat(values[j].body.tracks.items);
+      }
       return items.map(function(track) { return track.track.artists; })
     })
     .then(function(artistObjs) {
       return artistObjs.map(function(artist) { return artist[0].id; })
     })
     .then(function(aids) {
-      aids = Array.from(new Set(aids));
-      return spotifyApi.getArtists(aids.slice(0,3));
+      return mostFrequent(aids).map(function(obj) {
+        return obj.elt;
+      });
+    })
+    .then(function(aids){
+      aids = (aids.length < 7) ? aids.slice(0, aids.length) : aids.slice(0, 7);
+      return spotifyApi.getArtists(aids);
     })
     .then(function(data) {
-      return data.body.artists.map(function(artist) { return artist.genres; });
+      console.log("USER TOP ARTISTS:");
+      return data.body.artists.map(function(artist) {
+        console.log(artist.name);
+        return artist.genres;
+      });
     })
     .then(function(genres) {
       var allGenres = [];
       for (var i = 0; i < genres.length; ++i) {
         allGenres = allGenres.concat(genres[i]);
       }
-      allGenres = Array.from(new Set(allGenres));
-      deferred.resolve(allGenres);
+      return mostFrequent(allGenres).map(function(obj) {
+        return obj.elt;
+      });
+    })
+    .then(function(genres) {
+      genres = (genres.length < 7) ? genres.slice(0, genres.length) : genres.slice(0, 7);
+      deferred.resolve(genres);
     })
     .catch(function(err) {
       console.log("caught error in playlist genre extraction");
@@ -60,14 +107,12 @@ exports.getUserGenres = function(uid) {
       });
     })
     .then(function(pids) {
-      return getPlaylistGenres(uid, pids[0]);
+      shuffle(pids); 
+      return getPlaylistGenres(uid, pids.slice(0, 4));
     })
-    .then(function(values) {
-      var genres = [];
-      for (var i = 0; i < values.length; ++i) {
-        genres = genres.concat(values[i]);
-      }
-      genres = Array.from(new Set(genres));
+    .then(function(genres) {
+      console.log("USER TOP GENRES:");
+      console.log(genres);
       deferred.resolve(genres);
     })
     .catch(function(err) {
@@ -77,3 +122,4 @@ exports.getUserGenres = function(uid) {
 
   return deferred.promise;
 }
+
