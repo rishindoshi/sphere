@@ -4,7 +4,7 @@ var spotify = require('./spotify');
 var getVendor = function(req, res) {
   Vendor.find({ spotifyUserId: req.query.spotifyUserId })
     .then(function(vendor) {
-      res.json(vendor);
+      res.json(vendor[0]);
     })
     .catch(function(err) {
       res.send(err);
@@ -24,7 +24,7 @@ var postVendor = function(req, res) {
       return venueClient.createOrUpdateVenueFromVendor(vendorInfo);
     })
     .then(function(venue) {
-      res.send(venue);
+      res.status(200).send();
     })
     .catch(function(err) {
       res.send(err);

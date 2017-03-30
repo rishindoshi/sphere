@@ -21,10 +21,6 @@ module.exports = function(app) {
     .get(vendor.getVendor)
     .post(vendor.postVendor);
 
-  // TODO: For testing only; remove later
-  app.route('/venue')
-    .get(venue.getVenue);
-
   app.route('/venues')
     .get(venue.getVenues);
 
