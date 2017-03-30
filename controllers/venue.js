@@ -46,7 +46,7 @@ var postVenue = function(venue) {
 }
 
 var updateVenueVendors = function(venue, vendor) {
-  venue.vendorIds.push(vendorId);
+  venue.vendorIds.push(vendor.spotifyUserId);
   return venue.save();
 }
 
@@ -59,7 +59,7 @@ var updateVenueMusic = function(venue, genres) {
 var createOrUpdateVenueFromVendor = function(vendor) {
   var deferred = Q.defer();
 
-  Venue.find(vendor.venueId)
+  Venue.find({ venueId: vendor.venueId })
     .then(function(venues) {
       var venue = venues[0];
 

@@ -23,6 +23,16 @@ module.exports = function(app) {
 
   app.route('/venues')
     .get(venue.getVenues);
+  
+  app.post('/venue', function(req, res) {
+    venue.postVenue(req.body)
+      .then(function(venue) {
+        res.send(venue);
+      })
+      .catch(function(err) {
+        res.send(err);
+      });
+  });
 
   app.get('/userVerify', function(req, res) {
     var p1 = explorerDB.find({ spotifyUserId: req.query.userId });

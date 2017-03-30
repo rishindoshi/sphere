@@ -42,9 +42,9 @@ var getPlaylistGenres = function(uid, pids) {
   Q.all(promises)
     .then(function(values) {
       var items = [];
-      console.log("USER PLAYLISTS:");
+      // console.log("USER PLAYLISTS:");
       for (var j = 0; j < values.length; ++j) {
-        console.log(values[j].body.name);
+        // console.log(values[j].body.name);
         items = items.concat(values[j].body.tracks.items);
       }
       return items.map(function(track) { return track.track.artists; })
@@ -62,9 +62,9 @@ var getPlaylistGenres = function(uid, pids) {
       return spotifyApi.getArtists(aids);
     })
     .then(function(data) {
-      console.log("USER TOP ARTISTS:");
+      // console.log("USER TOP ARTISTS:");
       return data.body.artists.map(function(artist) {
-        console.log(artist.name);
+        // console.log(artist.name);
         return artist.genres;
       });
     })
@@ -111,8 +111,8 @@ exports.getUserGenres = function(uid) {
       return getPlaylistGenres(uid, pids.slice(0, 4));
     })
     .then(function(genres) {
-      console.log("USER TOP GENRES:");
-      console.log(genres);
+      // console.log("USER TOP GENRES:");
+      // console.log(genres);
       deferred.resolve(genres);
     })
     .catch(function(err) {

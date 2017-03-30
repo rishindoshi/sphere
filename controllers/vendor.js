@@ -1,4 +1,5 @@
 var Vendor = require('../models/vendor');
+var venueClient = require('./venue');
 var spotify = require('./spotify');
 
 var getVendor = function(req, res) {
