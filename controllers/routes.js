@@ -4,6 +4,7 @@ var Q = require('q');
 var explorer = require('./explorer');
 var vendor = require('./vendor');
 var venue = require('./venue');
+var user = require('./user');
 
 var explorerDB = require('../models/explorer');
 var vendorDB = require('../models/vendor');
@@ -35,22 +36,13 @@ module.exports = function(app) {
   });
 
   app.get('/userVerify', function(req, res) {
-    var p1 = explorerDB.find({ spotifyUserId: req.query.userId });
-    var p2 = vendorDB.find({ spotifyUserId: req.query.userId });
-
-    Q.all([p1, p2]).spread(function(p1, p2) {
-      if(p1[0]) {
-        res.send(p1[0]);
-      }
-      else if(p2[0]) {
-        res.send(p2[0]);
-      }
-      else {
-        res.send("usernoexist");
-      }
-    }, function(err) {
-      res.send(err);
-    });
+    user.userVerify(req.query.userId)
+      .then(function(stat) {
+        res.send(stat);
+      })
+      .catch(function(err) {
+        res.send(err)
+      });
   });
 
 };

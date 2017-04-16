@@ -28,10 +28,10 @@ var getVenue = function(query) {
 }
 
 var getVenues = function(req, res) {
-  var expMusic = [];
-  Explorer.find({ spotifyUserId: req.query.spotifyUserId })
-    .then(function(exps) {
-      expMusic = exps[0].musicTaste;
+  var userMusic = [];
+  user.userVerify({ spotifyUserId: req.query.spotifyUserId })
+    .then(function(user) {
+      userMusic = user.musicTaste;
       return Venue.find({});
     })
     .then(function(venues) {
@@ -39,7 +39,7 @@ var getVenues = function(req, res) {
       for (var i = 0; i < venues.length; ++i) {
         var venMusic = venues[i].musicTaste;
         promiseArray.push({
-          expSim: intersect(expMusic, venMusic),
+          expSim: intersect(userMusic, venMusic),
           venue: venues[i]
         });
       }
