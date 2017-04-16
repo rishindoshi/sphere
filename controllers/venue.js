@@ -7,6 +7,12 @@ var isObjEmpty = function(obj) {
   return Object.keys(obj).length === 0;
 }
 
+var intersect = function(arr1, arr2) {
+  return arr1.filter(function(n) {
+   return arr2.indexOf(n) !== -1;
+  });
+}
+
 var getVenue = function(query) {
   var deferred = Q.defer();
 
@@ -23,26 +29,27 @@ var getVenue = function(query) {
 
 var getVenues = function(req, res) {
   var expMusic = [];
-  var venues = [];
   Explorer.find({ spotifyUserId: req.query.spotifyUserId })
-    .then(function(exp) {
-      expMusic = exp.musicTaste;
+    .then(function(exps) {
+      expMusic = exps[0].musicTaste;
       return Venue.find({});
     })
-    .then(function(results) {
-      venues = results;
+    .then(function(venues) {
       var promiseArray = [];
       for (var i = 0; i < venues.length; ++i) {
         var venMusic = venues[i].musicTaste;
-        promiseArray.push(venMusic.filter(function(n) {
-          return expMusic.indexOf(n) !== -1;
+        promiseArray.push({
+          expSim: intersect(expMusic, venMusic),
+          venue: venues[i]
         });
       }
       return Q.all(promiseArray);
     })
-    .then(function(scores) {
-      console.log(scores);
-      res.send(venues);
+    .then(function(objs) {
+      for (var i = 0; i < objs.length; ++i) {
+        objs[i].expSim = objs[i].expSim.length;
+      }
+      res.send(objs);
     })
     .catch(function(err) {
       res.send(err);

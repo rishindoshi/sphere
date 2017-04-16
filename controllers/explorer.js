@@ -17,7 +17,7 @@ var postExplorer = function(req, res) {
   spotify.getUserGenres(explorerInfo.spotifyUserId)
     .then(function(genres) {
       explorerInfo.musicTaste = genres;
-      var newExplorer = new Vendor(explorerInfo);
+      var newExplorer = new Explorer(explorerInfo);
       return newExplorer.save();
     })
     .then(function(exp) {
