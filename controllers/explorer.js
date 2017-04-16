@@ -1,4 +1,5 @@
 var Explorer = require('../models/explorer');
+var spotify = require('./spotify');
 
 var getExplorer = function(req, res) {
   Explorer.find({ spotifyUserId: req.query.spotifyUserId })
@@ -11,11 +12,16 @@ var getExplorer = function(req, res) {
 }
 
 var postExplorer = function(req, res) {
-  var newExplorer = new Explorer(req.body);
-
-  newExplorer.save()
+  var explorerInfo = req.body;
+  
+  spotify.getUserGenres(explorerInfo.spotifyUserId)
+    .then(function(genres) {
+      explorerInfo.musicTaste = genres;
+      var newExplorer = new Vendor(explorerInfo);
+      return newExplorer.save();
+    })
     .then(function(exp) {
-      res.send(exp);
+      res.status(200).send();
     })
     .catch(function(err) {
       res.send(err);
