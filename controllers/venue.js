@@ -2,6 +2,7 @@ var Q = require('q');
 var geoLib = require('geolib');
 var Venue = require('../models/venue');
 var Explorer = require('../models/explorer');
+var user = require('./user');
 
 var isObjEmpty = function(obj) {
   return Object.keys(obj).length === 0;
@@ -29,7 +30,7 @@ var getVenue = function(query) {
 
 var getVenues = function(req, res) {
   var userMusic = [];
-  user.userVerify({ spotifyUserId: req.query.spotifyUserId })
+  user.userVerify(req.query.spotifyUserId)
     .then(function(user) {
       userMusic = user.musicTaste;
       return Venue.find({});

@@ -22,6 +22,6 @@ var userVerify = function(spotifyUserId) {
   });
 
   return deferred.promise;
-});
+};
 
 module.exports = { userVerify };
