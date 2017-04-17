@@ -60,7 +60,7 @@ module.exports = function(app) {
           return newVendor.save();
         })
         .then(function(newVendor) {
-          return venueClient.createOrUpdateVenueFromVendor(vendor);
+          return venue.createOrUpdateVenueFromVendor(vendor);
         })
         .then(function(venue) {
           console.log("SUCCESS");
