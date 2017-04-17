@@ -18,48 +18,56 @@ var vendors = [
     name: 'Nick',
     spotifyUserId: 'sagganaki',
     musicTaste: [],
+    venueName: "Cardamom",
     venueId: "ChIJxxmItH-uPIgRDuvzf4RZ4BM"
   },
   {
     name: 'Grace',
     spotifyUserId: '1221020391',
     musicTaste: [],
+    venueName: "Panera Bread",
     venueId: "ChIJr_YT60CuPIgRpIvRX_OkyBc"
   },
   {
     name: 'Nimesha',
     spotifyUserId: '124723383',
     musicTaste: [],
+    venueName: "Nagomi Sushi",
     venueId: "ChIJ2QZ0KTyuPIgRK3wySqT3nrw",
   },
   {
     name: 'Imani',
     spotifyUserId: 'imaniw95',
     musicTaste: [],
+    venueName: "Panda Express",
     venueId: "ChIJNS6x04euPIgRRy7F08FXI9o",
   },
   {
     name: 'Poop Pap',
     spotifyUserId: 'linol3um',
     musicTaste: [],
+    venueName: "Pizza House",
     venueId: "ChIJA3q9y0WuPIgRVA6XbahB8Oc",
   },
   {
     name: 'Nikil',
     spotifyUserId: 'nikilpremium',
     musicTaste: [],
+    venueName: "Rays Red Hots",
     venueId: "ChIJ8W1G1UWuPIgR6Jetrkwtshk",
   },
   {
     name: 'Shivum',
     spotifyUserId: '12144439228',
     musicTaste: [],
+    venueName: "BurgerFi",
     venueId: "ChIJmwnAUESuPIgRtwQCjYGcAT8",
   },
   {
     name: 'Arya',
     spotifyUserId: 'aryataylor',
     musicTaste: [],
+    venueName: "Hopcat",
     venueId: "ChIJ-3bRg0CuPIgRODtG17yNtCQ",
   },
 ];
